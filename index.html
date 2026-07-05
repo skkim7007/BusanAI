@@ -6,176 +6,683 @@
 
   <title>내 손안의 부산 | AI 마스코트 공유 보드</title>
 
-  <meta http-equiv="refresh" content="1; url=https://script.google.com/macros/s/AKfycbwGdwaGG8WOWTkS8VftrCm7E8hPK8LNt8eyc3tYutitiX8D2Cuj9KpcZfViU9ELy0RK/exec">
-
   <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --line: #d8e0ec;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+    }
+
     * {
       box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      min-height: 100vh;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+      color: var(--text);
       background:
         radial-gradient(circle at top left, #dbeafe, transparent 32rem),
         radial-gradient(circle at top right, #fef3c7, transparent 28rem),
-        #f4f7fb;
-      color: #172033;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+        var(--bg);
     }
 
-    .card {
-      width: min(720px, 100%);
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid #d8e0ec;
-      border-radius: 28px;
-      padding: 36px 28px;
-      box-shadow: 0 18px 48px rgba(15, 23, 42, 0.12);
+    header {
+      padding: 28px 20px 18px;
       text-align: center;
     }
 
-    h1 {
+    header h1 {
       margin: 0;
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
       letter-spacing: -0.04em;
     }
 
-    .subtitle {
-      margin: 14px auto 0;
-      max-width: 560px;
-      color: #64748b;
-      line-height: 1.7;
-      font-size: 1rem;
+    header p {
+      margin: 10px auto 0;
+      max-width: 780px;
+      color: var(--muted);
+      line-height: 1.6;
     }
 
-    .steps {
-      margin: 28px auto;
+    .toolbar {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto 18px;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: 1fr auto auto;
       gap: 10px;
+      align-items: center;
     }
 
-    .step {
-      background: #f8fafc;
-      border: 1px solid #d8e0ec;
-      border-radius: 18px;
-      padding: 14px 10px;
-      font-size: 0.92rem;
-      line-height: 1.4;
-    }
-
-    .step strong {
-      display: block;
-      margin-bottom: 4px;
-      color: #2563eb;
-    }
-
-    .button {
-      display: inline-block;
-      margin-top: 8px;
-      padding: 14px 22px;
+    .search {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.88);
       border-radius: 999px;
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      font-weight: 800;
-      transition: 0.15s ease;
+      padding: 13px 18px;
+      font-size: 1rem;
+      outline: none;
     }
 
-    .button:hover {
-      background: #1d4ed8;
+    button {
+      border: 0;
+      background: var(--primary);
+      color: white;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s ease;
+      white-space: nowrap;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
       transform: translateY(-1px);
     }
 
-    .notice {
-      margin-top: 22px;
-      padding: 14px 16px;
-      border-radius: 18px;
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      color: #9a3412;
-      line-height: 1.6;
-      font-size: 0.94rem;
-      text-align: left;
+    button.secondary {
+      background: #334155;
     }
 
-    .small {
-      margin-top: 18px;
-      color: #64748b;
+    button.ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+      transform: none;
+    }
+
+    .status {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto 16px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .board {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto 36px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(240px, 1fr));
+      gap: 16px;
+      align-items: start;
+    }
+
+    .column {
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(216, 224, 236, 0.9);
+      border-radius: 24px;
+      padding: 14px;
+      min-height: 520px;
+      box-shadow: var(--shadow);
+    }
+
+    .column-header {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .column-title {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.3;
+    }
+
+    .column-desc {
+      margin: 6px 0 0;
+      color: var(--muted);
       font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .add-small {
+      flex: 0 0 auto;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      padding: 0;
+      font-size: 1.3rem;
+      line-height: 1;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+      overflow: hidden;
+    }
+
+    .name {
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .time {
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-top: 2px;
+    }
+
+    .card p {
+      margin: 10px 0 0;
+      color: #263247;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .card img {
+      width: 100%;
+      max-height: 220px;
+      object-fit: contain;
+      border-radius: 14px;
+      margin-top: 10px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+    }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .like {
+      background: #eef2ff;
+      color: #3730a3;
+      border: 0;
+      padding: 8px 10px;
+      font-size: 0.9rem;
+    }
+
+    .delete {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid #fecaca;
+      padding: 7px 10px;
+      font-size: 0.82rem;
+    }
+
+    dialog {
+      border: 0;
+      border-radius: 24px;
+      width: min(560px, calc(100% - 28px));
+      padding: 0;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+    }
+
+    dialog::backdrop {
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(2px);
+    }
+
+    .modal {
+      padding: 22px;
+      background: white;
+    }
+
+    .modal h2 {
+      margin: 0 0 4px;
+    }
+
+    .hint {
+      color: var(--muted);
+      margin: 0 0 18px;
       line-height: 1.5;
     }
 
-    @media (max-width: 640px) {
-      .steps {
-        grid-template-columns: 1fr 1fr;
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      font-weight: 800;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      font: inherit;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .templates {
+      margin: 16px auto 40px;
+      width: min(1180px, calc(100% - 32px));
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .template-box {
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .template-box h3 {
+      margin: 0 0 10px;
+    }
+
+    .template-box pre {
+      white-space: pre-wrap;
+      margin: 0;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      line-height: 1.55;
+      color: #334155;
+      font-family: inherit;
+    }
+
+    .safe {
+      border-left: 8px solid var(--warning);
+    }
+
+    @media (max-width: 1040px) {
+      .board {
+        grid-template-columns: repeat(2, minmax(240px, 1fr));
       }
 
-      .card {
-        padding: 28px 20px;
+      .templates {
+        grid-template-columns: 1fr;
       }
     }
 
-    @media (max-width: 420px) {
-      .steps {
+    @media (max-width: 640px) {
+      .toolbar {
         grid-template-columns: 1fr;
+      }
+
+      .board {
+        grid-template-columns: 1fr;
+      }
+
+      .column {
+        min-height: auto;
+      }
+
+      .modal-actions {
+        flex-direction: column;
+      }
+
+      .modal-actions button {
+        width: 100%;
       }
     }
   </style>
 </head>
 
 <body>
-  <main class="card">
-    <h1>내 손안의 부산</h1>
-
-    <p class="subtitle">
-      중학교 2학년 영어·예술 융합 수업<br>
-      AI 마스코트 만들기와 슈링클스 키링 제작 공유 보드로 이동합니다.
+  <header>
+    <h1>내 손안의 부산: AI 마스코트 공유 보드</h1>
+    <p>
+      중학교 2학년 영어·예술 융합 수업용 보드입니다.
+      활동별로 조사 내용, AI 캐릭터, 영어 소개문, 완성 키링을 공유하세요.
     </p>
+  </header>
 
-    <section class="steps">
-      <div class="step">
-        <strong>1단계</strong>
-        부산 자료 조사
-      </div>
-
-      <div class="step">
-        <strong>2단계</strong>
-        AI 캐릭터 만들기
-      </div>
-
-      <div class="step">
-        <strong>3단계</strong>
-        영어 소개서 작성
-      </div>
-
-      <div class="step">
-        <strong>4단계</strong>
-        키링 완성작 공유
-      </div>
-    </section>
-
-    <a
-      class="button"
-      href="https://script.google.com/macros/s/AKfycbwGdwaGG8WOWTkS8VftrCm7E8hPK8LNt8eyc3tYutitiX8D2Cuj9KpcZfViU9ELy0RK/exec"
+  <div class="toolbar">
+    <input
+      id="searchInput"
+      class="search"
+      type="search"
+      placeholder="이름, 장소, 마스코트 이름, 영어 문장 검색하기"
     >
-      공유 보드 열기
-    </a>
+    <button onclick="openModal()">+ 게시물 올리기</button>
+    <button class="secondary" onclick="loadPosts()">새로고침</button>
+  </div>
 
-    <div class="notice">
-      <strong>안전 안내</strong><br>
-      슈링클스는 굽는 과정에서 매우 뜨겁습니다.
-      오븐이나 히팅기는 선생님만 사용하고, 학생들은 작품이 충분히 식은 뒤 키링 고리를 연결합니다.
+  <div id="status" class="status">게시물을 불러오는 중...</div>
+
+  <main class="board" id="board"></main>
+
+  <section class="templates">
+    <div class="template-box">
+      <h3>영어 소개문 틀</h3>
+      <pre>Hello.
+My mascot's name is __________.
+It is inspired by __________.
+It is __________ and __________.
+Its colors are __________ and __________.
+It shows __________.
+I like my mascot because it is __________.</pre>
     </div>
 
-    <p class="small">
-      잠시 후 자동으로 공유 보드가 열립니다.<br>
-      자동으로 이동하지 않으면 위의 <strong>공유 보드 열기</strong> 버튼을 눌러 주세요.
-    </p>
-  </main>
+    <div class="template-box safe">
+      <h3>슈링클스 안전 수칙</h3>
+      <pre>1. 오븐이나 히팅기를 만지지 않습니다.
+2. 구워진 슈링클스는 바로 만지지 않습니다.
+3. 뜨거운 작품은 선생님이 집게와 장갑으로 꺼냅니다.
+4. 충분히 식은 뒤 키링 고리를 답니다.
+5. 뜨거운 도구로 장난치지 않습니다.</pre>
+    </div>
+  </section>
+
+  <dialog id="postDialog">
+    <form class="modal" method="dialog" id="postForm">
+      <h2>게시물 올리기</h2>
+      <p class="hint">
+        활동을 고르고 내용을 작성하세요.
+        이미지는 파일 업로드가 아니라 이미지 주소를 붙여넣는 방식입니다.
+      </p>
+
+      <label for="stage">활동 선택</label>
+      <select id="stage" required>
+        <option value="research">1. 부산 자료 조사</option>
+        <option value="ai">2. AI 캐릭터 공유</option>
+        <option value="intro">3. 영어 소개서</option>
+        <option value="keyring">4. 슈링클스 키링 완성</option>
+      </select>
+
+      <label for="studentName">이름</label>
+      <input id="studentName" maxlength="30" placeholder="예: 김수경" required>
+
+      <label for="title">제목</label>
+      <input id="title" maxlength="60" placeholder="예: 해운대 갈매기 마스코트" required>
+
+      <label for="content">내용</label>
+      <textarea
+        id="content"
+        maxlength="700"
+        placeholder="조사 내용, AI 프롬프트, 영어 소개문, 느낀 점 등을 적어 보세요."
+        required
+      ></textarea>
+
+      <label for="imageUrl">이미지 주소</label>
+      <input id="imageUrl" placeholder="https://...">
+
+      <div class="modal-actions">
+        <button type="button" class="ghost" onclick="closeModal()">취소</button>
+        <button id="submitBtn" type="submit">올리기</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwGdwaGG8WOWTkS8VftrCm7E8hPK8LNt8eyc3tYutitiX8D2Cuj9KpcZfViU9ELy0RK/exec";
+
+    const stages = [
+      {
+        id: "research",
+        title: "1. 부산 자료 조사",
+        desc: "장소, 음식, 상징, 색깔, 느낌을 조사해서 공유해요."
+      },
+      {
+        id: "ai",
+        title: "2. AI 캐릭터 공유",
+        desc: "Canva 등 AI로 만든 캐릭터와 사용한 프롬프트를 올려요."
+      },
+      {
+        id: "intro",
+        title: "3. 영어 소개서",
+        desc: "쉬운 영어 문장으로 마스코트를 소개해요."
+      },
+      {
+        id: "keyring",
+        title: "4. 키링 완성작",
+        desc: "슈링클스 키링 사진과 제작 소감을 공유해요."
+      }
+    ];
+
+    let posts = [];
+
+    const board = document.getElementById("board");
+    const dialog = document.getElementById("postDialog");
+    const form = document.getElementById("postForm");
+    const searchInput = document.getElementById("searchInput");
+    const statusBox = document.getElementById("status");
+    const submitBtn = document.getElementById("submitBtn");
+
+    function callApi(action, params = {}) {
+      return new Promise(function(resolve, reject) {
+        const callbackName = "jsonpCallback_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+
+        const query = new URLSearchParams({
+          action: action,
+          callback: callbackName,
+          ...params
+        });
+
+        const script = document.createElement("script");
+        script.src = API_URL + "?" + query.toString();
+
+        window[callbackName] = function(data) {
+          delete window[callbackName];
+          script.remove();
+
+          if (!data.ok) {
+            reject(new Error(data.error || "알 수 없는 오류가 발생했습니다."));
+            return;
+          }
+
+          resolve(data);
+        };
+
+        script.onerror = function() {
+          delete window[callbackName];
+          script.remove();
+          reject(new Error("Apps Script API에 연결할 수 없습니다."));
+        };
+
+        document.body.appendChild(script);
+      });
+    }
+
+    function openModal(stageId = "") {
+      if (stageId) {
+        document.getElementById("stage").value = stageId;
+      }
+
+      dialog.showModal();
+    }
+
+    function closeModal() {
+      form.reset();
+      dialog.close();
+    }
+
+    function setStatus(message) {
+      statusBox.textContent = message;
+    }
+
+    async function loadPosts() {
+      setStatus("게시물을 불러오는 중...");
+
+      try {
+        const data = await callApi("getPosts");
+        posts = data.posts || [];
+        render();
+        setStatus(`총 ${posts.length}개의 게시물이 있습니다.`);
+      } catch (error) {
+        setStatus("오류: " + error.message);
+      }
+    }
+
+    function escapeHtml(str = "") {
+      return String(str).replace(/[&<>"']/g, function(ch) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        }[ch];
+      });
+    }
+
+    function render() {
+      const keyword = searchInput.value.trim().toLowerCase();
+
+      board.innerHTML = stages.map(function(stage) {
+        const filtered = posts
+          .filter(function(post) {
+            return post.stage === stage.id;
+          })
+          .filter(function(post) {
+            const text = `${post.studentName} ${post.title} ${post.content}`.toLowerCase();
+            return !keyword || text.includes(keyword);
+          });
+
+        return `
+          <section class="column">
+            <div class="column-header">
+              <div>
+                <h2 class="column-title">${stage.title}</h2>
+                <p class="column-desc">${stage.desc}</p>
+              </div>
+              <button class="add-small" onclick="openModal('${stage.id}')" title="이 활동에 올리기">+</button>
+            </div>
+
+            <div class="cards">
+              ${
+                filtered.length
+                  ? filtered.map(cardHtml).join("")
+                  : `<p class="column-desc">아직 게시물이 없습니다.</p>`
+              }
+            </div>
+          </section>
+        `;
+      }).join("");
+    }
+
+    function cardHtml(post) {
+      const image = post.imageUrl || "";
+
+      return `
+        <article class="card">
+          <div>
+            <div class="name">${escapeHtml(post.title)}</div>
+            <div class="time">${escapeHtml(post.studentName)} · ${escapeHtml(post.createdAt)}</div>
+          </div>
+
+          <p>${escapeHtml(post.content)}</p>
+
+          ${
+            image
+              ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(post.title)} 이미지" loading="lazy">`
+              : ""
+          }
+
+          <div class="card-actions">
+            <button class="like" onclick="likePost('${post.id}')">👍 ${post.likes || 0}</button>
+            <button class="delete" onclick="deletePost('${post.id}')">교사용 삭제</button>
+          </div>
+        </article>
+      `;
+    }
+
+    form.addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "올리는 중...";
+
+      const post = {
+        stage: document.getElementById("stage").value,
+        studentName: document.getElementById("studentName").value.trim(),
+        title: document.getElementById("title").value.trim(),
+        content: document.getElementById("content").value.trim(),
+        imageUrl: document.getElementById("imageUrl").value.trim()
+      };
+
+      try {
+        const data = await callApi("addPost", post);
+        posts = data.posts || [];
+        render();
+        setStatus(`총 ${posts.length}개의 게시물이 있습니다.`);
+        closeModal();
+      } catch (error) {
+        alert("오류: " + error.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "올리기";
+      }
+    });
+
+    async function likePost(id) {
+      try {
+        const data = await callApi("likePost", { id: id });
+        posts = data.posts || [];
+        render();
+      } catch (error) {
+        alert("오류: " + error.message);
+      }
+    }
+
+    async function deletePost(id) {
+      const code = prompt("선생님 삭제 비밀번호를 입력하세요.");
+
+      if (!code) {
+        return;
+      }
+
+      try {
+        const data = await callApi("deletePost", {
+          id: id,
+          deleteCode: code
+        });
+
+        posts = data.posts || [];
+        render();
+        setStatus(`총 ${posts.length}개의 게시물이 있습니다.`);
+      } catch (error) {
+        alert("오류: " + error.message);
+      }
+    }
+
+    searchInput.addEventListener("input", render);
+
+    loadPosts();
+
+    setInterval(loadPosts, 20000);
+  </script>
 </body>
 </html>
