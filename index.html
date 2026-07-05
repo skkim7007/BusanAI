@@ -7,79 +7,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Jua', sans-serif;
-            background-color: #f0f8ff; 
-            color: #333;
-        }
-        .worksheet-container {
-            max-width: 850px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        .section-title {
-            background-color: #ffe4e1;
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            margin-bottom: 15px;
-            font-size: 1.25rem;
-            color: #d2691e;
-        }
-        .input-line {
-            border: none;
-            border-bottom: 2px dashed #a0aec0;
-            display: inline-block;
-            height: 25px;
-            background: transparent;
-            font-family: 'Jua', sans-serif;
-            font-size: 1.1rem;
-            text-align: center;
-            color: #2b6cb0;
-            outline: none;
-        }
+        body { font-family: 'Jua', sans-serif; background-color: #f0f8ff; color: #333; }
+        .worksheet-container { max-width: 850px; margin: 0 auto; background-color: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .section-title { background-color: #ffe4e1; display: inline-block; padding: 5px 15px; border-radius: 20px; margin-bottom: 15px; font-size: 1.25rem; color: #d2691e; }
+        .input-line { border: none; border-bottom: 2px dashed #a0aec0; display: inline-block; height: 25px; background: transparent; font-family: 'Jua', sans-serif; font-size: 1.1rem; text-align: center; color: #2b6cb0; outline: none; }
         .input-line:focus { border-bottom: 2px solid #ed8936; }
-        
-        .fill-blank {
-            border: none;
-            border-bottom: 2px dashed #4299e1;
-            background: rgba(239, 246, 255, 0.5);
-            font-family: 'Jua', sans-serif;
-            font-size: 1.1rem;
-            text-align: center;
-            color: #2b6cb0;
-            outline: none;
-            transition: all 0.3s;
-        }
-        .fill-blank:focus {
-            border-bottom: 2px solid #ed8936;
-            background-color: #fffaf0;
-        }
-        .prompt-box {
-            background-color: #edf2f7;
-            border-left: 5px solid #4299e1;
-            padding: 15px;
-            border-radius: 5px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.95rem;
-        }
+        .fill-blank { border: none; border-bottom: 2px dashed #4299e1; background: rgba(239, 246, 255, 0.5); font-family: 'Jua', sans-serif; font-size: 1.1rem; text-align: center; color: #2b6cb0; outline: none; transition: all 0.3s; }
+        .fill-blank:focus { border-bottom: 2px solid #ed8936; background-color: #fffaf0; }
         .tab-btn { transition: all 0.3s ease; }
         .tab-btn.active { background-color: #4299e1; color: white; }
         .tab-btn.inactive { background-color: #e2e8f0; color: #4a5568; }
         .tab-btn.inactive:hover { background-color: #cbd5e0; }
-        
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        .spinner {
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            width: 20px; height: 20px;
-            animation: spin 1s ease-in-out infinite;
-            display: inline-block; vertical-align: middle; margin-right: 8px;
-        }
+        .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; width: 20px; height: 20px; animation: spin 1s ease-in-out infinite; display: inline-block; vertical-align: middle; margin-right: 8px; }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -130,7 +70,6 @@
             <!-- Activity 2 -->
             <div class="mb-10 bg-yellow-50 p-6 rounded-2xl border-2 border-yellow-200">
                 <h3 class="section-title text-yellow-700 bg-yellow-200">🎨 Activity 2. 마스코트 계획하기</h3>
-                <p class="mb-4 text-lg">내가 만들 마스코트의 특징을 상상하며 질문에 답해보세요.</p>
                 <div class="space-y-4 text-lg">
                     <p>1. What is your mascot’s name?<br>➔ 이름은 <input type="text" class="fill-blank w-48"> 입니다.</p>
                     <p>2. What is it inspired by?<br>➔ <input type="text" class="fill-blank w-48"> 에서 영감을 받았습니다.</p>
@@ -173,13 +112,21 @@
                 </div>
             </div>
 
-            <!-- Activity 5: 사진 업로드 -->
+            <!-- Activity 5: 사진 2장 업로드 -->
             <div class="mb-10 bg-pink-50 p-6 rounded-2xl border-2 border-pink-200">
-                <h3 class="section-title text-pink-700 bg-pink-200">📸 Activity 5. 마스코트/키링 갤러리 전시</h3>
-                <p class="mb-4 text-lg">AI가 그려준 마스코트나 내가 직접 만든 키링 사진을 업로드해주세요! 친구들과 갤러리워크를 할 거예요.</p>
-                <div class="bg-white p-6 rounded-xl border-2 border-dashed border-pink-300 text-center">
-                    <input type="file" id="imageUpload" accept="image/*" onchange="previewImage(event)" class="mb-4 text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100">
-                    <img id="imgPreview" class="max-h-64 mx-auto rounded-lg shadow-md hidden">
+                <h3 class="section-title text-pink-700 bg-pink-200">📸 Activity 5. 마스코트/키링 갤러리 제출</h3>
+                <p class="mb-4 text-lg">AI가 그려준 마스코트 이미지와, 내가 직접 구운 키링 사진을 모두 올려주세요!</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-xl border-2 border-dashed border-pink-300 text-center">
+                        <p class="font-bold text-pink-600 mb-2">🤖 1. AI 마스코트 이미지</p>
+                        <input type="file" id="uploadAI" accept="image/*" onchange="previewImage(event, 'previewAI')" class="mb-2 w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-pink-50 file:text-pink-700">
+                        <img id="previewAI" class="max-h-48 mx-auto rounded-lg shadow-md hidden">
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border-2 border-dashed border-pink-300 text-center">
+                        <p class="font-bold text-pink-600 mb-2">🔑 2. 실제 키링 사진</p>
+                        <input type="file" id="uploadKeyring" accept="image/*" onchange="previewImage(event, 'previewKeyring')" class="mb-2 w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-pink-50 file:text-pink-700">
+                        <img id="previewKeyring" class="max-h-48 mx-auto rounded-lg shadow-md hidden">
+                    </div>
                 </div>
             </div>
 
@@ -191,10 +138,10 @@
             </div>
         </div>
 
-        <!-- ================= 갤러리 탭 ================= -->
+        <!-- ================= 갤러리 탭 (프롬프트/사진만 노출) ================= -->
         <div id="gallery-content" class="hidden">
             <div class="text-center mb-6">
-                <button onclick="loadGallery()" class="bg-white border-2 border-blue-300 text-blue-600 py-2 px-6 rounded-full font-bold hover:bg-blue-50">
+                <button onclick="loadGallery()" class="bg-white border-2 border-blue-300 text-blue-600 py-2 px-6 rounded-full font-bold hover:bg-blue-50 shadow-sm">
                     🔄 새로고침 (최신 작품 보기)
                 </button>
             </div>
@@ -209,8 +156,8 @@
     </div>
 
     <script>
-        // 선생님께서 새로 배포하신 앱스 스크립트 웹 앱 URL을 여기에 넣어주세요!
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGdwaGG8WOWTkS8VftrCm7E8hPK8LNt8eyc3tYutitiX8D2Cuj9KpcZfViU9ELy0RK/exec";
+        // 🚨 새로 배포한 웹 앱 URL을 여기에 붙여넣어 주세요!
+        const SCRIPT_URL = "https://script.google.com/macros/s/새로운_URL_문자열을_넣으세요/exec";
 
         // 탭 전환
         function switchTab(tab) {
@@ -236,14 +183,12 @@
             }
         }
 
-        // 프롬프트 자동 완성 (사용자가 직접 수정 가능)
+        // 프롬프트 자동 완성
         function updatePrompt() {
             const insp = document.getElementById('pInspire').value || '[장소/상징]';
             const color = document.getElementById('pColor').value || '[색상]';
             const mood = document.getElementById('pMood').value || '[느낌]';
-            
-            const autoPrompt = `Make a cute mascot for Busan.\nIt is inspired by ${insp}.\nUse ${color} colors.\nMake it ${mood}.\nMake it simple and easy to draw.`;
-            document.getElementById('myPrompt').value = autoPrompt;
+            document.getElementById('myPrompt').value = `Make a cute mascot for Busan.\nIt is inspired by ${insp}.\nUse ${color} colors.\nMake it ${mood}.\nMake it simple and easy to draw.`;
         }
 
         // 프롬프트 복사
@@ -255,10 +200,10 @@
         }
 
         // 이미지 미리보기
-        function previewImage(event) {
+        function previewImage(event, previewId) {
             const reader = new FileReader();
             reader.onload = function(){
-                const output = document.getElementById('imgPreview');
+                const output = document.getElementById(previewId);
                 output.src = reader.result;
                 output.classList.remove('hidden');
             };
@@ -267,7 +212,7 @@
             }
         }
 
-        // Base64 변환 함수
+        // Base64 변환
         function getBase64(file) {
            return new Promise((resolve, reject) => {
              const reader = new FileReader();
@@ -277,27 +222,26 @@
            });
         }
 
-        // 데이터 및 사진 제출
+        // 데이터 및 2장의 사진 제출
         async function submitData() {
             const name = document.getElementById('sName').value.trim();
-            const mName = document.getElementById('mName').value.trim();
-
-            if (!name || !mName) {
-                alert("이름과 마스코트 이름(Activity 4)은 꼭 적어주세요!");
-                return;
-            }
+            if (!name) { alert("이름을 꼭 적어주세요!"); return; }
 
             const fullName = `${document.getElementById('sGrade').value}학년 ${document.getElementById('sClass').value}반 ${document.getElementById('sNum').value}번 ${name}`.trim();
             
-            let base64Image = "";
-            const fileInput = document.getElementById('imageUpload');
-            if (fileInput.files.length > 0) {
-                base64Image = await getBase64(fileInput.files[0]);
+            let base64AI = "";
+            let base64Keyring = "";
+            
+            if (document.getElementById('uploadAI').files.length > 0) {
+                base64AI = await getBase64(document.getElementById('uploadAI').files[0]);
+            }
+            if (document.getElementById('uploadKeyring').files.length > 0) {
+                base64Keyring = await getBase64(document.getElementById('uploadKeyring').files[0]);
             }
 
             const data = {
                 studentName: fullName,
-                mascotName: mName,
+                mascotName: document.getElementById('mName').value.trim(),
                 inspiredBy: document.getElementById('mInspiration').value,
                 adj1: document.getElementById('mAdj1').value,
                 adj2: document.getElementById('mAdj2').value,
@@ -305,8 +249,9 @@
                 color2: document.getElementById('mColor2').value,
                 shows: document.getElementById('mShows').value,
                 reason: document.getElementById('mReason').value,
-                myPrompt: document.getElementById('myPrompt').value, // 프롬프트 추가
-                imageBase64: base64Image // 사진 데이터 추가
+                myPrompt: document.getElementById('myPrompt').value,
+                imageBase64_ai: base64AI,
+                imageBase64_keyring: base64Keyring
             };
 
             const btn = document.getElementById('submitBtn');
@@ -314,12 +259,19 @@
             btn.disabled = true;
 
             try {
-                await fetch(SCRIPT_URL, {
+                const res = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify(data),
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' }
                 });
+                const resultText = await res.text();
                 
+                if(resultText.includes("error")) {
+                    console.error(resultText);
+                    alert("구글 드라이브 저장 권한 등의 오류가 발생했습니다. 개발자 도구를 확인해주세요.");
+                    throw new Error("Apps Script Error");
+                }
+
                 btn.innerHTML = '🚀 제출 성공!';
                 btn.classList.replace('bg-blue-500', 'bg-green-500');
                 
@@ -330,13 +282,13 @@
                     btn.disabled = false;
                 }, 1500);
             } catch (error) {
-                alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+                alert("네트워크 오류 또는 권한 오류가 발생했습니다.");
                 btn.innerHTML = '🚀 다시 제출하기';
                 btn.disabled = false;
             }
         }
 
-        // 갤러리 로딩
+        // 갤러리 로딩 (사진 2장과 프롬프트만 노출)
         async function loadGallery() {
             const grid = document.getElementById('gallery-grid');
             const loading = document.getElementById('gallery-loading');
@@ -359,30 +311,31 @@
                     const card = document.createElement('div');
                     card.className = "bg-white p-5 rounded-2xl shadow-lg border-2 border-pink-100 flex flex-col";
                     
-                    // 사진이 있으면 표시, 없으면 기본 아이콘
-                    const imageHtml = item.imageUrl 
-                        ? `<img src="${item.imageUrl}" class="w-full h-64 object-cover rounded-xl mb-4 border border-gray-200">` 
-                        : `<div class="w-full h-40 bg-gray-100 rounded-xl mb-4 flex items-center justify-center text-4xl">🖼️</div>`;
+                    const imgAI = item.imageUrl_ai ? `<img src="${item.imageUrl_ai}" class="w-full h-48 object-cover rounded-xl border border-gray-200">` : `<div class="w-full h-48 bg-gray-100 rounded-xl flex items-center justify-center text-sm text-gray-400">사진 없음</div>`;
+                    const imgKeyring = item.imageUrl_keyring ? `<img src="${item.imageUrl_keyring}" class="w-full h-48 object-cover rounded-xl border border-gray-200">` : `<div class="w-full h-48 bg-gray-100 rounded-xl flex items-center justify-center text-sm text-gray-400">사진 없음</div>`;
 
                     card.innerHTML = `
-                        ${imageHtml}
-                        <div class="flex justify-between items-center mb-3 border-b border-gray-100 pb-2">
-                            <h4 class="text-2xl text-blue-700">${item.mascotName || '이름 없음'}</h4>
-                            <span class="text-sm bg-gray-100 px-2 py-1 rounded text-gray-600">${item.studentName}</span>
+                        <div class="mb-4">
+                            <span class="text-lg font-bold bg-blue-100 px-3 py-1 rounded-full text-blue-800">🧑‍🎓 ${item.studentName}</span>
                         </div>
-                        <div class="text-gray-700 text-lg leading-relaxed flex-grow">
-                            <p>💡 <b>Inspired by:</b> ${item.inspiredBy}</p>
-                            <p>✨ <b>Features:</b> ${item.adjectives}</p>
-                            <p class="mt-2 text-blue-500">"I like it because it is ${item.reason}."</p>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div>
+                                <p class="text-xs font-bold text-pink-500 mb-1 text-center">🤖 AI 마스코트</p>
+                                ${imgAI}
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-green-500 mb-1 text-center">🔑 실제 키링</p>
+                                ${imgKeyring}
+                            </div>
                         </div>
-                        <div class="mt-4 p-3 bg-gray-50 rounded-lg text-sm text-gray-500 font-mono overflow-auto max-h-24">
-                            <b>사용된 프롬프트:</b><br>${item.myPrompt || '입력 안함'}
+                        <div class="mt-auto p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 font-mono overflow-auto h-24">
+                            <b class="text-purple-600">📝 사용된 프롬프트:</b><br>${item.myPrompt || '입력된 프롬프트가 없습니다.'}
                         </div>
                     `;
                     grid.appendChild(card);
                 });
             } catch (error) {
-                loading.innerHTML = "데이터를 불러오지 못했습니다. 앱스 스크립트 배포 주소를 확인해주세요.";
+                loading.innerHTML = "데이터를 불러오지 못했습니다. 앱스 스크립트 '새 배포' 주소를 확인해주세요.";
             }
         }
     </script>
