@@ -3,1298 +3,729 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>내 손안의 부산 | AI 마스코트와 키링 만들기</title>
+  <title>내 손안의 부산 | 귀여운 JPG 학습지</title>
+  
+  <!-- html2canvas 라이브러리 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- 귀여운 폰트 (배달의민족 주아체 & 둥근 폰트) -->
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #f5f8fc;
-      --paper: #ffffff;
-      --ink: #1f2937;
-      --muted: #667085;
-      --line: #d9e2ef;
-      --blue: #2563eb;
-      --blue-soft: #eaf2ff;
-      --green-soft: #e7f8f5;
-      --pink-soft: #fce7f3;
-      --yellow-soft: #fff4d6;
-      --violet-soft: #f1e9ff;
-      --danger: #dc2626;
-      --shadow: 0 16px 38px rgba(31, 41, 55, 0.11);
-      --radius: 8px;
+      --bg: #fff0f5; /* 부드러운 핑크 배경 */
+      --ink: #334155;
+      --muted: #64748b;
+      --blue: #4facfe;
+      --pink: #ff758c;
+      --yellow: #f6d365;
+      --mint: #43e97b;
+      --purple: #a18cd1;
+      --line: #cbd5e1;
+      --shadow: 0 8px 0 rgba(0,0,0,0.08); /* 귀여운 그림자 */
+      --radius: 24px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+      font-family: 'Jua', 'Nunito', sans-serif;
       color: var(--ink);
-      background:
-        radial-gradient(circle at 10% 0%, rgba(37, 99, 235, 0.15), transparent 26rem),
-        radial-gradient(circle at 90% 8%, rgba(219, 39, 119, 0.12), transparent 24rem),
-        var(--bg);
-    }
-
-    button,
-    input,
-    textarea,
-    select {
-      font: inherit;
-    }
-
-    button {
-      border: 0;
-      border-radius: var(--radius);
-      padding: 11px 15px;
-      background: var(--blue);
-      color: #ffffff;
-      font-weight: 800;
-      cursor: pointer;
-      transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
-      white-space: nowrap;
-    }
-
-    button:hover {
-      background: #1d4ed8;
-      transform: translateY(-1px);
-    }
-
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.68;
-      transform: none;
-    }
-
-    .page {
-      width: min(1060px, calc(100% - 28px));
-      margin: 0 auto;
-      padding: 24px 0 40px;
-    }
-
-    .shell {
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(217, 226, 239, 0.92);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .header {
-      padding: 30px 26px 18px;
-      text-align: center;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .header h1 {
-      margin: 0;
-      font-size: clamp(2rem, 5vw, 3rem);
-      letter-spacing: 0;
-      color: var(--blue);
-    }
-
-    .header p {
-      margin: 8px auto 0;
-      max-width: 800px;
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: 1.05rem;
-    }
-
-    .tabs {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-
-    .tab-btn {
-      background: #e2e8f0;
-      color: #334155;
-    }
-
-    .tab-btn.active {
-      background: var(--blue);
-      color: #ffffff;
-    }
-
-    .student-bar {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, auto));
-      justify-content: end;
-      gap: 10px;
-      padding: 18px 26px 0;
-      color: #334155;
-      font-weight: 800;
-      align-items: center;
-    }
-
-    .student-bar input {
-      width: 70px;
-      border: 0;
-      border-bottom: 2px dashed #94a3b8;
-      background: transparent;
-      padding: 6px 4px;
-      text-align: center;
-      color: var(--blue);
-      font-weight: 800;
-      outline: none;
-    }
-
-    .student-bar .name-input {
-      width: 120px;
-    }
-
-    .content {
-      padding: 22px 26px 30px;
-    }
-
-    .activity {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--paper);
-      margin-bottom: 18px;
-      overflow: hidden;
-    }
-
-    .activity-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      align-items: flex-start;
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .activity-head h2 {
-      margin: 0;
-      font-size: 1.15rem;
-      line-height: 1.35;
-    }
-
-    .activity-head p {
-      margin: 5px 0 0;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .badge {
-      flex: 0 0 auto;
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 0.82rem;
-      font-weight: 900;
-      background: #dbeafe;
-      color: #1e40af;
-    }
-
-    .blue {
-      background: var(--blue-soft);
-    }
-
-    .yellow {
-      background: var(--yellow-soft);
-    }
-
-    .violet {
-      background: var(--violet-soft);
-    }
-
-    .green {
-      background: var(--green-soft);
-    }
-
-    .pink {
-      background: var(--pink-soft);
-    }
-
-    .activity-body {
-      padding: 18px;
-      background: rgba(255, 255, 255, 0.76);
-    }
-
-    .note {
-      margin: 0 0 14px;
-      color: #475569;
-      line-height: 1.55;
-    }
-
-    .word-bank {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .word-bank span {
-      border: 1px solid var(--line);
-      background: #ffffff;
-      border-radius: 999px;
-      padding: 6px 10px;
-      color: #334155;
-      font-size: 0.9rem;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .form-row {
-      display: grid;
-      gap: 7px;
-      min-width: 0;
-    }
-
-    label {
-      font-weight: 900;
-      color: #334155;
-    }
-
-    .help {
-      color: var(--muted);
-      font-size: 0.88rem;
-      line-height: 1.45;
-    }
-
-    .field,
-    select {
-      width: 100%;
-      border: 1px solid #cbd5e1;
-      border-radius: var(--radius);
-      background: #ffffff;
-      padding: 11px 12px;
-      color: var(--ink);
-      outline: none;
-    }
-
-    .field:focus,
-    select:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-    }
-
-    textarea {
-      min-height: 118px;
-      resize: vertical;
-      line-height: 1.55;
-    }
-
-    .translation-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .preview-box {
-      background: #ffffff;
-      border: 1px solid #dbe4ef;
-      border-radius: var(--radius);
-      padding: 14px;
-      color: #334155;
-      line-height: 1.65;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .korean-box {
-      background: #f8fafc;
-    }
-
-    .sentence-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .sentence-card {
-      background: #ffffff;
-      border: 1px solid #cde7e3;
-      border-radius: var(--radius);
-      padding: 13px;
-    }
-
-    .sentence-card p {
-      margin: 0 0 9px;
-      color: #334155;
-      line-height: 1.5;
-    }
-
-    .sentence-card .meaning {
-      color: #0f766e;
-      font-size: 0.92rem;
-      margin-top: 8px;
-    }
-
-    .upload-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .upload-box {
-      background: #ffffff;
-      border: 2px dashed #f9a8d4;
-      border-radius: var(--radius);
-      padding: 15px;
-      text-align: center;
-    }
-
-    .upload-box strong {
-      display: block;
-      margin-bottom: 10px;
-      color: #be185d;
-    }
-
-    .upload-box input {
-      width: 100%;
-      color: var(--muted);
-    }
-
-    .preview {
-      display: none;
-      width: 100%;
-      max-height: 230px;
-      object-fit: contain;
-      margin-top: 12px;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      background: #f8fafc;
-    }
-
-    .submit-area {
-      text-align: center;
-      margin-top: 28px;
-    }
-
-    .submit-area button {
-      min-width: 270px;
-      font-size: 1.08rem;
-      padding: 14px 20px;
-    }
-
-    .status {
-      margin-top: 12px;
-      color: var(--muted);
-      min-height: 24px;
-      line-height: 1.5;
-    }
-
-    .spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.42);
-      border-top-color: #ffffff;
-      margin-right: 8px;
-      vertical-align: -2px;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .gallery-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-
-    .gallery-toolbar h2 {
-      margin: 0;
-      font-size: 1.35rem;
-    }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .gallery-card {
-      background: #ffffff;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: 0 8px 20px rgba(31, 41, 55, 0.08);
-      padding: 15px;
-      display: grid;
-      gap: 12px;
-    }
-
-    .gallery-name {
-      font-weight: 900;
-      color: #1e40af;
-      background: #dbeafe;
-      border-radius: 999px;
-      padding: 7px 11px;
-      width: fit-content;
-      max-width: 100%;
-      word-break: break-word;
-    }
-
-    .gallery-title {
-      margin: 0;
+      background-color: #fdfbfb;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 117, 140, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(79, 172, 254, 0.15) 0%, transparent 20%);
+      background-attachment: fixed;
       font-size: 1.1rem;
     }
 
-    .image-pair {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
+    button, input, textarea, select {
+      font-family: 'Jua', 'Nunito', sans-serif;
+      font-size: 1rem;
     }
 
-    .gallery-image-block p {
-      margin: 0 0 6px;
-      text-align: center;
-      font-weight: 900;
-      color: #475569;
-      font-size: 0.85rem;
+    button {
+      border: 3px solid transparent;
+      border-radius: 16px;
+      padding: 12px 20px;
+      background: var(--pink);
+      color: #ffffff;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #e05c71;
+      transition: all 0.1s ease;
     }
 
-    .gallery-card img,
-    .empty-image {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #f8fafc;
+    button:active {
+      transform: translateY(6px);
+      box-shadow: 0 0 0 #e05c71;
     }
 
-    .empty-image {
-      display: grid;
-      place-items: center;
-      color: #94a3b8;
-      font-size: 0.9rem;
-      text-align: center;
-      padding: 10px;
+    .secondary { background: var(--blue); box-shadow: 0 6px 0 #3a8ac9; }
+    .secondary:active { box-shadow: 0 0 0 #3a8ac9; }
+
+    .page {
+      width: min(1000px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 30px 0 50px;
     }
 
-    .gallery-detail,
-    .prompt-card {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: var(--radius);
-      padding: 11px;
-      color: #334155;
-      line-height: 1.55;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .prompt-card {
-      max-height: 145px;
-      overflow: auto;
-    }
-
-    .empty-state,
-    .error-state {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 34px 16px;
-      color: var(--muted);
+    .hero {
       background: #ffffff;
-      border: 1px solid var(--line);
+      border: 4px solid var(--ink);
       border-radius: var(--radius);
-      line-height: 1.6;
+      padding: 24px 30px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: var(--shadow);
     }
 
-    .error-state {
-      color: var(--danger);
-      border-color: #fecaca;
-      background: #fff5f5;
+    .hero h1 { margin: 0; color: var(--pink); font-size: 2.2rem; text-shadow: 2px 2px 0px #ffe4e8; }
+    .hero p { margin: 8px 0 0; color: var(--muted); font-size: 1.1rem; }
+    
+    .layout { display: grid; gap: 24px; }
+
+    .panel {
+      background: #ffffff;
+      border: 4px solid var(--ink);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
     }
 
-    .hidden {
-      display: none !important;
+    .panel-head {
+      padding: 16px 24px;
+      border-bottom: 4px solid var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
     }
 
-    @media (max-width: 780px) {
-      .page {
-        width: min(100% - 18px, 1060px);
-        padding-top: 10px;
-      }
+    .panel-head h2 { margin: 0; font-size: clamp(1.2rem, 4vw, 1.4rem); display: flex; align-items: center; gap: 8px; word-break: keep-all; }
+    .panel-head p { margin: 0; color: #555; font-size: 1.05rem; word-break: keep-all; }
 
-      .header,
-      .content {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
+    /* 패널 헤더 테마 색상 */
+    .bg-blue { background: #e0f2fe; }
+    .bg-yellow { background: #fef08a; }
+    .bg-violet { background: #e9d5ff; }
+    .bg-green { background: #bbf7d0; }
+    .bg-pink { background: #fbcfe8; }
+    
+    .panel-body { padding: 24px; background: #ffffff; }
 
-      .student-bar,
-      .grid-2,
-      .grid-3,
-      .upload-grid,
-      .gallery-grid,
-      .image-pair,
-      .translation-grid {
-        grid-template-columns: 1fr;
-      }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    
+    label { font-size: 1.15rem; color: var(--ink); margin-bottom: 6px; display: block; }
+    
+    .field, select {
+      width: 100%;
+      border: 3px solid #cbd5e1;
+      border-radius: 12px;
+      background: #f8fafc;
+      padding: 12px 14px;
+      color: var(--ink);
+      outline: none;
+      transition: all 0.2s;
+    }
 
-      .student-bar {
-        justify-content: stretch;
-        padding-left: 16px;
-        padding-right: 16px;
-      }
+    .field:focus, select:focus {
+      border-color: var(--pink);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(255, 117, 140, 0.15);
+    }
 
-      .student-bar input,
-      .student-bar .name-input {
-        width: 100%;
-      }
+    /* 학생 정보 선택 영역 특별 스타일 */
+    .student-info-row { display: flex; gap: 10px; }
+    .student-info-row > div { flex: 1; }
 
-      .submit-area button {
-        width: 100%;
-        min-width: 0;
-      }
+    .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+    .category-box { background: #f1f5f9; border: 2px dashed #94a3b8; border-radius: 16px; padding: 14px; }
+    .category-box h3 { margin: 0 0 10px; font-size: 1.2rem; color: #334155; text-align: center; }
+    .chip-list { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+    .chip {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 99px;
+      padding: 4px 10px;
+      font-size: 0.95rem;
+      color: #64748b;
+      cursor: default; /* 클릭 안됨을 표시 */
+    }
+
+    .sentence-builder {
+      background: #f8fafc;
+      border: 3px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 20px;
+    }
+    
+    .sentence-line {
+      margin-bottom: 16px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      line-height: 2;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .blank-input {
+      border: none;
+      border-bottom: 3px dashed var(--blue);
+      background: transparent;
+      padding: 4px 8px;
+      font-size: 1.2rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      color: var(--blue);
+      text-align: center;
+      width: 190px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .blank-input:focus { border-bottom-color: var(--pink); color: var(--pink); width: 220px; }
+    .blank-input::placeholder { color: #cbd5e1; font-weight: normal; font-size: 1.05rem; }
+    
+    .kor-sub {
+      width: 100%;
+      font-family: 'Jua', sans-serif;
+      font-size: 1rem;
+      color: #94a3b8;
+      margin-top: -8px;
+    }
+
+    /* 사진 업로드 영역 */
+    .photo-upload-box { text-align: center; }
+    .preview-img {
+      display: none; width: 100%; height: 200px; object-fit: contain; margin-top: 12px;
+      border: 3px solid #e2e8f0; border-radius: 12px; background: #fff;
+    }
+
+    .final-wrap { overflow-x: auto; padding: 24px; background: #f1f5f9; }
+    .final-sheet {
+      width: 980px; margin: 0 auto; background: #ffffff;
+      border: 4px solid var(--ink); border-radius: 20px; padding: 40px;
+      box-shadow: 0 12px 0 rgba(0,0,0,0.1);
+    }
+    .final-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      border-bottom: 4px solid var(--blue); padding-bottom: 20px; margin-bottom: 24px;
+    }
+    .final-header h2 { margin: 0; font-size: 2.5rem; color: var(--blue); }
+    .final-header p { margin: 5px 0 0; color: #64748b; font-size: 1.2rem; }
+    
+    .final-student-tag {
+      background: #fffbea; border: 3px dashed var(--yellow); border-radius: 16px;
+      padding: 10px 20px; font-size: 1.4rem; color: var(--ink);
+    }
+
+    .final-section { margin-bottom: 30px; }
+    .final-section h3 {
+      display: inline-block; background: var(--pink); color: #fff;
+      padding: 6px 16px; border-radius: 99px; font-size: 1.3rem; margin: 0 0 16px;
+    }
+    .bg-blue-badge { background: var(--blue) !important; }
+    .bg-green-badge { background: var(--mint) !important; color: #1e293b !important; }
+    .bg-violet-badge { background: var(--purple) !important; }
+    
+    .final-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .final-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    
+    .final-item {
+      background: #f8fafc; border: 3px solid #e2e8f0; border-radius: 12px; padding: 12px 16px;
+    }
+    .prompt-text { display: block; color: #64748b; font-size: 1rem; margin-bottom: 6px; }
+    .answer-text { display: block; color: var(--ink); font-size: 1.3rem; font-weight: bold; word-break: break-word; }
+    
+    .final-paragraph {
+      background: #f8fafc; border: 3px solid #e2e8f0; border-radius: 16px;
+      padding: 20px; font-size: 1.3rem; font-family: 'Nunito', sans-serif; line-height: 1.8;
+    }
+    .filled-blank {
+      color: var(--pink); border-bottom: 3px solid var(--yellow); padding: 0 4px; font-weight: 800;
+    }
+
+    .photo-result-box {
+      border: 3px solid #cbd5e1; border-radius: 16px; padding: 12px; text-align: center; background: #fff;
+    }
+    .photo-result-box img { width: 100%; height: 260px; object-fit: contain; border-radius: 8px; }
+    .empty-photo-result {
+      height: 260px; display: flex; align-items: center; justify-content: center;
+      background: #f1f5f9; border: 2px dashed #94a3b8; border-radius: 8px; color: #94a3b8; font-size: 1.2rem;
+    }
+
+    @media (max-width: 820px) {
+      .grid-2, .grid-3, .category-grid { grid-template-columns: 1fr; }
+      .final-sheet { width: 900px; } /* 캡처 화질 유지를 위해 모바일에서도 강제 크기 지정 */
     }
   </style>
 </head>
 
 <body>
   <main class="page">
-    <section class="shell">
-      <header class="header">
-        <h1>내 손안의 부산</h1>
-        <p>부산의 장소, 음식, 상징을 바탕으로 AI 마스코트를 만들고 영어 발표문과 슈링클스 키링 작품을 갤러리에 제출합니다.</p>
-
-        <nav class="tabs" aria-label="화면 선택">
-          <button type="button" id="tabWorksheet" class="tab-btn active" onclick="switchTab('worksheet')">학습지 작성</button>
-          <button type="button" id="tabGallery" class="tab-btn" onclick="switchTab('gallery')">작품 갤러리</button>
-        </nav>
-      </header>
-
-      <div id="studentInfo" class="student-bar">
-        <label><input type="text" id="sGrade" inputmode="numeric" maxlength="2"> 학년</label>
-        <label><input type="text" id="sClass" inputmode="numeric" maxlength="2"> 반</label>
-        <label><input type="text" id="sNum" inputmode="numeric" maxlength="2"> 번</label>
-        <label>이름 <input type="text" id="sName" class="name-input" maxlength="20"></label>
+    <header class="hero">
+      <div>
+        <h1>🌊 내 손안의 부산</h1>
+        <p>빈칸을 채우며 나만의 부산 마스코트를 영어로 표현해봐요!</p>
       </div>
+    </header>
 
-      <div id="worksheetContent" class="content">
-        <section class="activity blue">
-          <div class="activity-head">
-            <div>
-              <h2>Activity 1. 부산 소재 고르기</h2>
-              <p>마스코트에 넣고 싶은 부산의 장소, 음식, 상징을 고릅니다.</p>
-            </div>
-            <span class="badge">조사</span>
-          </div>
-          <div class="activity-body">
-            <p class="note">아래 예시에서 하나를 고르거나, 내가 알고 있는 부산의 다른 소재를 적어도 됩니다.</p>
-            <div class="word-bank" aria-label="장소 예시">
-              <span>장소: Haeundae Beach 해운대</span>
-              <span>Gwangalli Beach 광안리</span>
-              <span>Gamcheon Culture Village 감천문화마을</span>
-              <span>Jagalchi Market 자갈치시장</span>
-              <span>Taejongdae 태종대</span>
-              <span>Busan Tower 부산타워</span>
-              <span>Gwangandaegyo Bridge 광안대교</span>
-              <span>Songdo Cable Car 송도 케이블카</span>
-            </div>
-            <div class="word-bank" aria-label="음식 예시">
-              <span>음식: fish cake 어묵</span>
-              <span>milmyeon 밀면</span>
-              <span>ssiat hotteok 씨앗호떡</span>
-              <span>pork soup 돼지국밥</span>
-              <span>seafood 해산물</span>
-              <span>grilled clam 조개구이</span>
-              <span>eomuk 어묵</span>
-              <span>wheat noodles 밀면</span>
-            </div>
-            <div class="word-bank" aria-label="상징 예시">
-              <span>상징: sea 바다</span>
-              <span>seagull 갈매기</span>
-              <span>wave 파도</span>
-              <span>bridge 다리</span>
-              <span>fireworks 불꽃</span>
-              <span>ship 배</span>
-              <span>lighthouse 등대</span>
-              <span>mountain 산</span>
-              <span>blue color 파란색</span>
-              <span>festival 축제</span>
-            </div>
-
-            <div class="grid-3">
-              <div class="form-row">
-                <label for="busanPlace">부산 장소</label>
-                <input id="busanPlace" class="field" placeholder="예: Haeundae Beach">
-                <span class="help">마스코트 배경이나 모양에 넣을 장소</span>
-              </div>
-              <div class="form-row">
-                <label for="busanFood">부산 음식</label>
-                <input id="busanFood" class="field" placeholder="예: fish cake">
-                <span class="help">소품이나 무늬로 바꿀 수 있는 음식</span>
-              </div>
-              <div class="form-row">
-                <label for="busanSymbol">부산 상징</label>
-                <input id="busanSymbol" class="field" placeholder="예: seagull, sea, bridge">
-                <span class="help">부산이 떠오르게 하는 자연, 문화, 색깔</span>
-              </div>
-              <div class="form-row">
-                <label for="busanCategory">중심 소재</label>
-                <select id="busanCategory">
-                  <option value="place">장소</option>
-                  <option value="food">음식</option>
-                  <option value="symbol">상징</option>
-                  <option value="culture">문화</option>
-                  <option value="mixed">여러 소재 섞기</option>
-                </select>
-              </div>
-              <div class="form-row">
-                <label for="busanMood">부산의 느낌</label>
-                <input id="busanMood" class="field" placeholder="예: lively / 활기찬">
-              </div>
-              <div class="form-row">
-                <label for="busanReason">고른 이유</label>
-                <input id="busanReason" class="field" placeholder="예: It is famous. / 유명하기 때문이다.">
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="activity yellow">
-          <div class="activity-head">
-            <div>
-              <h2>Activity 2. 마스코트 디자인 계획하기</h2>
-              <p>이름, 성격, 색깔, 특별한 특징을 정합니다.</p>
-            </div>
-            <span class="badge">계획</span>
-          </div>
-          <div class="activity-body">
-            <div class="grid-3">
-              <div class="form-row">
-                <label for="planName">마스코트 이름</label>
-                <input type="text" id="planName" class="field" placeholder="예: Bada">
-              </div>
-              <div class="form-row">
-                <label for="planIdea">아이디어를 얻은 것</label>
-                <input type="text" id="planIdea" class="field" placeholder="예: sea and seagull">
-                <span class="help">영어 표현: I got the idea from ...</span>
-              </div>
-              <div class="form-row">
-                <label for="planLook">겉모습</label>
-                <input type="text" id="planLook" class="field" placeholder="예: a small bird">
-              </div>
-              <div class="form-row">
-                <label for="planPersonality">성격</label>
-                <input type="text" id="planPersonality" class="field" placeholder="예: cheerful and brave">
-              </div>
-              <div class="form-row">
-                <label for="planColors">색깔</label>
-                <input type="text" id="planColors" class="field" placeholder="예: blue and white">
-              </div>
-              <div class="form-row">
-                <label for="planFeature">특별한 특징</label>
-                <input type="text" id="planFeature" class="field" placeholder="예: wave-shaped wings">
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="activity violet">
-          <div class="activity-head">
-            <div>
-              <h2>Activity 3. AI 이미지 요청문 만들기</h2>
-              <p>AI에게 그림을 부탁하는 영어 문장을 만듭니다. 아래에 한국어 뜻도 함께 나옵니다.</p>
-            </div>
-            <span class="badge">AI</span>
-          </div>
-          <div class="activity-body">
-            <div class="grid-3">
-              <div class="form-row">
-                <label for="pIdea">아이디어를 얻은 것</label>
-                <input id="pIdea" class="field prompt-field" placeholder="예: the sea and a seagull">
-              </div>
-              <div class="form-row">
-                <label for="pColor">주요 색깔</label>
-                <input id="pColor" class="field prompt-field" placeholder="예: blue and white">
-              </div>
-              <div class="form-row">
-                <label for="pMood">느낌</label>
-                <input id="pMood" class="field prompt-field" placeholder="예: cute and friendly">
-              </div>
-              <div class="form-row">
-                <label for="pFeature">특징</label>
-                <input id="pFeature" class="field prompt-field" placeholder="예: wave-shaped wings">
-              </div>
-              <div class="form-row">
-                <label for="pStyle">그림 스타일</label>
-                <input id="pStyle" class="field prompt-field" placeholder="예: sticker style">
-              </div>
-              <div class="form-row">
-                <label for="pBackground">배경</label>
-                <input id="pBackground" class="field prompt-field" placeholder="예: simple white background">
-              </div>
-            </div>
-
-            <div class="translation-grid">
-              <div>
-                <label for="myPrompt">AI에게 보낼 영어 요청문</label>
-                <textarea id="myPrompt" class="field" placeholder="자동으로 만들어집니다. 직접 수정해도 됩니다."></textarea>
-              </div>
-              <div>
-                <label>한국어 뜻</label>
-                <div id="promptKorean" class="preview-box korean-box"></div>
-              </div>
-            </div>
-            <p class="note" style="margin-top: 12px;">AI 도구에 붙여넣을 때는 왼쪽 영어 요청문만 복사하면 됩니다.</p>
-            <button type="button" onclick="copyPrompt()">영어 요청문 복사</button>
-          </div>
-        </section>
-
-        <section class="activity green">
-          <div class="activity-head">
-            <div>
-              <h2>Activity 4. 영어 발표 스크립트 쓰기</h2>
-              <p>짧은 문장을 여러 개 연결해 발표문을 만듭니다. 각 문장 아래에 한국어 뜻이 있습니다.</p>
-            </div>
-            <span class="badge">발표</span>
-          </div>
-          <div class="activity-body">
-            <div class="sentence-list">
-              <div class="sentence-card">
-                <p>My mascot's name is <input id="mName" class="field writing-field" placeholder="Bada"></p>
-                <div class="meaning">내 마스코트의 이름은 ______ 입니다.</div>
-              </div>
-              <div class="sentence-card">
-                <p>I got the idea from <input id="mIdea" class="field writing-field" placeholder="the sea and a seagull"></p>
-                <div class="meaning">나는 ______ 에서 아이디어를 얻었습니다.</div>
-              </div>
-              <div class="sentence-card">
-                <p>It looks like <input id="mLook" class="field writing-field" placeholder="a small bird"></p>
-                <div class="meaning">그것은 ______ 처럼 보입니다.</div>
-              </div>
-              <div class="sentence-card">
-                <p>It is <input id="mAdj1" class="field writing-field" placeholder="cute"> and <input id="mAdj2" class="field writing-field" placeholder="friendly"></p>
-                <div class="meaning">그것은 ______ 하고 ______ 합니다.</div>
-              </div>
-              <div class="sentence-card">
-                <p>The colors are <input id="mColor1" class="field writing-field" placeholder="blue"> and <input id="mColor2" class="field writing-field" placeholder="white"></p>
-                <div class="meaning">색깔은 ______ 와 ______ 입니다.</div>
-              </div>
-              <div class="sentence-card">
-                <p>It has <input id="mFeature" class="field writing-field" placeholder="wave-shaped wings"></p>
-                <div class="meaning">그것은 ______ 을 가지고 있습니다.</div>
-              </div>
-              <div class="sentence-card">
-                <p>It shows Busan's <input id="mShows" class="field writing-field" placeholder="bright sea"></p>
-                <div class="meaning">그것은 부산의 ______ 을 보여 줍니다.</div>
-              </div>
-              <div class="sentence-card">
-                <p>I want people to feel <input id="mFeeling" class="field writing-field" placeholder="happy"></p>
-                <div class="meaning">나는 사람들이 ______ 을 느끼면 좋겠습니다.</div>
-              </div>
-              <div class="sentence-card">
-                <p>I like my mascot because <input id="mReason" class="field writing-field" placeholder="it is cute and easy to remember"></p>
-                <div class="meaning">나는 ______ 때문에 내 마스코트가 좋습니다.</div>
-              </div>
-            </div>
-
-            <div class="translation-grid">
-              <div>
-                <label>완성된 영어 발표문</label>
-                <div id="presentationPreview" class="preview-box"></div>
-              </div>
-              <div>
-                <label>한국어 뜻</label>
-                <div id="presentationKorean" class="preview-box korean-box"></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="activity pink">
-          <div class="activity-head">
-            <div>
-              <h2>Activity 5. 갤러리 제출</h2>
-              <p>AI 이미지와 완성 키링 사진을 올리고, 작품을 돌아봅니다.</p>
-            </div>
-            <span class="badge">제출</span>
-          </div>
-          <div class="activity-body">
-            <div class="upload-grid">
-              <div class="upload-box">
-                <strong>1. AI 마스코트 이미지</strong>
-                <input type="file" id="uploadAI" accept="image/*" onchange="previewImage(event, 'previewAI')">
-                <img id="previewAI" class="preview" alt="AI 마스코트 미리보기">
-              </div>
-              <div class="upload-box">
-                <strong>2. 완성 키링 사진</strong>
-                <input type="file" id="uploadKeyring" accept="image/*" onchange="previewImage(event, 'previewKeyring')">
-                <img id="previewKeyring" class="preview" alt="키링 사진 미리보기">
-              </div>
-            </div>
-            <div class="grid-2" style="margin-top: 14px;">
-              <div class="form-row">
-                <label for="favoritePart">가장 마음에 드는 부분</label>
-                <input id="favoritePart" class="field" placeholder="예: The wings look cute. / 날개가 귀엽다.">
-              </div>
-              <div class="form-row">
-                <label for="improveNext">다음에 고치고 싶은 부분</label>
-                <input id="improveNext" class="field" placeholder="예: I want clearer colors. / 색을 더 선명하게 하고 싶다.">
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div class="submit-area">
-          <button type="button" id="submitBtn" onclick="submitData()">갤러리에 제출하기</button>
-          <div id="submitStatus" class="status" role="status" aria-live="polite"></div>
+    <div class="layout">
+      <section class="panel">
+        <div class="panel-head bg-blue">
+          <h2>🧑‍🎓 학생 정보</h2>
+          <p>내 정보를 정확하게 입력해주세요.</p>
         </div>
-      </div>
+        <div class="panel-body">
+          <div class="student-info-row">
+            <div>
+              <label>학년</label>
+              <select id="grade" class="live-field">
+                <option value="2">2학년</option>
+                <!-- 필요시 학년 추가 -->
+              </select>
+            </div>
+            <div>
+              <label>반</label>
+              <select id="classNo" class="live-field">
+                <option value="1">1반</option><option value="2">2반</option>
+                <option value="3">3반</option><option value="4">4반</option>
+                <option value="5">5반</option><option value="6">6반</option>
+                <option value="7">7반</option><option value="8">8반</option>
+                <option value="9">9반</option><option value="10">10반</option>
+              </select>
+            </div>
+            <div>
+              <label>번호</label>
+              <select id="studentNo" class="live-field">
+                <!-- JS로 1~29번 채움 -->
+              </select>
+            </div>
+            <div style="flex: 2;">
+              <label>이름</label>
+              <input type="text" id="studentName" class="field live-field" placeholder="예: 김부산">
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <div id="galleryContent" class="content hidden">
-        <div class="gallery-toolbar">
-          <h2>작품 갤러리</h2>
-          <button type="button" onclick="loadGallery()">새로고침</button>
+      <section class="panel">
+        <div class="panel-head bg-yellow">
+          <h2>🔍 Activity 1. 부산 소재 고르기</h2>
+          <p>아래 예시를 참고하여 직접 영어로 타이핑해보세요!</p>
         </div>
-        <div id="galleryGrid" class="gallery-grid">
-          <div class="empty-state">갤러리를 불러오는 중입니다...</div>
+        <div class="panel-body">
+          <div class="category-grid">
+            <div class="category-box">
+              <h3>📍 장소 Place</h3>
+              <div class="chip-list">
+                <span class="chip">Haeundae Beach 해운대</span>
+                <span class="chip">Gwangalli Beach 광안리</span>
+                <span class="chip">Gamcheon Culture Village 감천마을</span>
+                <span class="chip">Jagalchi Market 자갈치시장</span>
+                <span class="chip">Taejongdae 태종대</span>
+              </div>
+            </div>
+            <div class="category-box">
+              <h3>🍲 음식 Food</h3>
+              <div class="chip-list">
+                <span class="chip">fish cake 어묵</span>
+                <span class="chip">milmyeon 밀면</span>
+                <span class="chip">ssiat hotteok 씨앗호떡</span>
+                <span class="chip">pork soup 돼지국밥</span>
+                <span class="chip">seafood 해산물</span>
+              </div>
+            </div>
+            <div class="category-box">
+              <h3>✨ 상징 Symbol</h3>
+              <div class="chip-list">
+                <span class="chip">sea 바다</span>
+                <span class="chip">seagull 갈매기</span>
+                <span class="chip">wave 파도</span>
+                <span class="chip">bridge 다리</span>
+                <span class="chip">fireworks 불꽃</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div><label>내가 고른 장소</label><input id="place" class="field live-field" placeholder="예: Haeundae Beach"></div>
+            <div><label>내가 고른 음식</label><input id="food" class="field live-field" placeholder="예: fish cake"></div>
+            <div><label>내가 고른 상징</label><input id="symbol" class="field live-field" placeholder="예: seagull"></div>
+            <div><label>마스코트 중심 소재</label><input id="mainIdea" class="field live-field" placeholder="예: sea and seagull"></div>
+            <div><label>부산의 느낌</label><input id="mood" class="field live-field" placeholder="예: bright and lively"></div>
+            <div><label>고른 이유</label><input id="chooseReason" class="field live-field" placeholder="예: It is famous"></div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head bg-violet">
+          <h2>🎨 Activity 2. 마스코트 디자인 계획</h2>
+          <p>마스코트의 모습을 상상하며 짧은 영어 단어/구로 적어보세요.</p>
+        </div>
+        <div class="panel-body">
+          <div class="grid-3">
+            <div><label>마스코트 이름</label><input id="mascotName" class="field live-field" placeholder="예: Bada"></div>
+            <div><label>아이디어를 얻은 것</label><input id="ideaFrom" class="field live-field" placeholder="예: sea and seagull"></div>
+            <div><label>겉모습</label><input id="lookLike" class="field live-field" placeholder="예: a small bird"></div>
+            <div><label>성격/느낌</label><input id="adjectives" class="field live-field" placeholder="예: cute and friendly"></div>
+            <div><label>색깔</label><input id="colors" class="field live-field" placeholder="예: blue and white"></div>
+            <div><label>특별한 특징</label><input id="feature" class="field live-field" placeholder="예: wave-shaped wings"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head bg-green">
+          <h2>🤖 Activity 3. AI 이미지 요청문 만들기</h2>
+          <p>Activity 2에서 적은 단어들을 활용해 빈칸을 채워 완성된 문장을 만들어봐요!</p>
+        </div>
+        <div class="panel-body">
+          <div class="sentence-builder">
+            <div class="sentence-line">
+              <span>Make a cute Busan mascot.</span>
+            </div>
+            
+            <div class="sentence-line">
+              <span>I got the idea from</span>
+              <input type="text" id="aiIdea" class="blank-input live-field" placeholder="예: sea and seagull">
+              <span>.</span>
+              <div class="kor-sub">나는 [소재]에서 아이디어를 얻었어.</div>
+            </div>
+            
+            <div class="sentence-line">
+              <span>Use</span>
+              <input type="text" id="aiColors" class="blank-input live-field" placeholder="예: blue and white">
+              <span>colors.</span>
+              <div class="kor-sub">[색깔] 색을 사용해 줘.</div>
+            </div>
+
+            <div class="sentence-line">
+              <span>Make it</span>
+              <input type="text" id="aiMood" class="blank-input live-field" placeholder="예: cute and friendly">
+              <span>.</span>
+              <div class="kor-sub">[느낌]나게 만들어 줘.</div>
+            </div>
+
+            <div class="sentence-line">
+              <span>It has</span>
+              <input type="text" id="aiFeature" class="blank-input live-field" placeholder="예: wave-shaped wings">
+              <span>.</span>
+              <div class="kor-sub">그것은 [특징]을 가지고 있어.</div>
+            </div>
+
+            <div class="sentence-line">
+              <span>Draw it in a simple sticker style. Make it easy to use as a keyring design.</span>
+              <div class="kor-sub">단순한 스티커 스타일로 그려 줘. 키링 디자인으로 쓰기 쉽게 만들어 줘.</div>
+            </div>
+          </div>
+          
+          <div style="margin-top: 20px; text-align: right;">
+            <button type="button" class="secondary" id="copyBtn" onclick="copyAiPrompt()">📋 AI 프롬프트 복사하기</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head" style="background:#e2e8f0;">
+          <h2>📸 Activity 5. 작품 사진 및 돌아보기</h2>
+        </div>
+        <div class="panel-body">
+          <div class="grid-2">
+            <div class="photo-upload-box">
+              <label>AI가 만들어준 마스코트 이미지</label>
+              <input type="file" class="field" accept="image/*" onchange="handleImage(event, 'ai')">
+              <img id="aiPreview" class="preview-img">
+            </div>
+            <div class="photo-upload-box">
+              <label>내가 만든 슈링클스 키링 사진</label>
+              <input type="file" class="field" accept="image/*" onchange="handleImage(event, 'keyring')">
+              <img id="keyringPreview" class="preview-img">
+            </div>
+          </div>
+          <div class="grid-2" style="margin-top: 20px;">
+            <div><label>가장 마음에 드는 부분</label><input id="favoritePart" class="field live-field"></div>
+            <div><label>다음에 고치고 싶은 부분</label><input id="improveNext" class="field live-field"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head" style="background:#334155; color:#fff;">
+          <h2 style="color:#fff;">📄 최종본 미리보기</h2>
+          <p style="color:#cbd5e1;">이 모습 그대로 다운로드 됩니다.</p>
+        </div>
+        
+        <div class="final-wrap">
+          <article id="finalSheet" class="final-sheet">
+            <header class="final-header">
+              <div>
+                <h2>내 손안의 부산 🌊</h2>
+                <p>나만의 AI 마스코트 & 슈링클스 키링</p>
+              </div>
+              <div class="final-student-tag" id="finalStudent">2학년 1반 1번 김부산</div>
+            </header>
+
+            <section class="final-section">
+              <h3>1. 부산 소재 조사 & 2. 디자인 계획</h3>
+              <div class="final-grid-3">
+                <div class="final-item"><span class="prompt-text">장소</span><span id="f_place" class="answer-text"></span></div>
+                <div class="final-item"><span class="prompt-text">음식</span><span id="f_food" class="answer-text"></span></div>
+                <div class="final-item"><span class="prompt-text">상징</span><span id="f_symbol" class="answer-text"></span></div>
+                <div class="final-item"><span class="prompt-text">마스코트 이름</span><span id="f_mascotName" class="answer-text"></span></div>
+                <div class="final-item"><span class="prompt-text">겉모습</span><span id="f_lookLike" class="answer-text"></span></div>
+                <div class="final-item"><span class="prompt-text">성격/느낌</span><span id="f_adjectives" class="answer-text"></span></div>
+              </div>
+            </section>
+
+            <section class="final-section">
+              <h3 class="bg-blue-badge">3. AI 이미지 요청문</h3>
+              <div class="final-paragraph" id="f_aiPrompt">
+                <!-- JS에서 채워짐 -->
+              </div>
+            </section>
+
+            <section class="final-section">
+              <h3 class="bg-violet-badge">4. 발표 스크립트</h3>
+              <div class="final-paragraph" id="f_presentation">
+                <!-- JS에서 채워짐 -->
+              </div>
+            </section>
+
+            <section class="final-section">
+              <h3 class="bg-green-badge">5. 완성 작품 및 돌아보기</h3>
+              <div class="final-grid-2">
+                <div class="photo-result-box">
+                  <span class="prompt-text">AI 마스코트 이미지</span>
+                  <div id="finalAiEmpty" class="empty-photo-result">사진을 첨부해주세요</div>
+                  <img id="finalAiImage" style="display:none;">
+                </div>
+                <div class="photo-result-box">
+                  <span class="prompt-text">완성 키링 사진</span>
+                  <div id="finalKeyringEmpty" class="empty-photo-result">사진을 첨부해주세요</div>
+                  <img id="finalKeyringImage" style="display:none;">
+                </div>
+              </div>
+              <div class="final-grid-2" style="margin-top:16px;">
+                <div class="final-item"><span class="prompt-text">마음에 드는 부분</span><span id="f_favoritePart" class="answer-text"></span></div>
+                <div class="final-item"><span class="prompt-text">다음에 고칠 부분</span><span id="f_improveNext" class="answer-text"></span></div>
+              </div>
+            </section>
+          </article>
+        </div>
+        
+        <div class="panel-body" style="text-align: right;">
+          <div id="downloadStatus" style="color:var(--pink); font-size:1.2rem; font-weight:bold; margin-bottom:10px;"></div>
+          <button type="button" class="secondary" onclick="updateFinalSheet()">새로고침</button>
+          <button type="button" onclick="downloadJpg()">📷 JPG 다운로드</button>
+        </div>
+      </section>
+    </div>
   </main>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1-ynOUkEAyzHFI8ri0tFyI5fguI-9cJwFOJ5fZyHE3HJlJuKhJOYYsvhLThDbx0Ju/exec";
-    const MAX_IMAGE_EDGE = 1200;
-    const IMAGE_QUALITY = 0.82;
+    const imageData = { ai: "", keyring: "" };
 
-    const tabWorksheet = document.getElementById("tabWorksheet");
-    const tabGallery = document.getElementById("tabGallery");
-    const worksheetContent = document.getElementById("worksheetContent");
-    const galleryContent = document.getElementById("galleryContent");
-    const studentInfo = document.getElementById("studentInfo");
-    const submitBtn = document.getElementById("submitBtn");
-    const submitStatus = document.getElementById("submitStatus");
-    const galleryGrid = document.getElementById("galleryGrid");
-
-    function switchTab(tab) {
-      const isWorksheet = tab === "worksheet";
-
-      tabWorksheet.classList.toggle("active", isWorksheet);
-      tabGallery.classList.toggle("active", !isWorksheet);
-      worksheetContent.classList.toggle("hidden", !isWorksheet);
-      galleryContent.classList.toggle("hidden", isWorksheet);
-      studentInfo.classList.toggle("hidden", !isWorksheet);
-
-      if (!isWorksheet) {
-        loadGallery();
-      }
+    // 번호 1~29번 자동 생성
+    const studentNoSelect = document.getElementById("studentNo");
+    for(let i=1; i<=29; i++){
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = i + "번";
+      studentNoSelect.appendChild(opt);
     }
 
-    function valueOf(id) {
+    function val(id) {
       return document.getElementById(id).value.trim();
     }
-
-    function updatePrompt() {
-      const idea = valueOf("pIdea") || "[아이디어를 얻은 것]";
-      const color = valueOf("pColor") || "[색깔]";
-      const mood = valueOf("pMood") || "[느낌]";
-      const feature = valueOf("pFeature") || "[특징]";
-      const style = valueOf("pStyle") || "sticker style";
-      const background = valueOf("pBackground") || "simple white background";
-
-      document.getElementById("myPrompt").value =
-        `Make a cute Busan mascot.\n` +
-        `I got the idea from ${idea}.\n` +
-        `Use ${color} colors.\n` +
-        `Make it ${mood}.\n` +
-        `It has ${feature}.\n` +
-        `Draw it in ${style} with ${background}.\n` +
-        `Make it simple and easy to use as a keyring design.`;
-
-      document.getElementById("promptKorean").textContent =
-        `귀여운 부산 마스코트를 만들어 주세요.\n` +
-        `아이디어는 ${idea}에서 얻었습니다.\n` +
-        `${color} 색을 사용해 주세요.\n` +
-        `${mood} 느낌으로 만들어 주세요.\n` +
-        `${feature} 특징을 넣어 주세요.\n` +
-        `${background} 배경의 ${style} 그림으로 그려 주세요.\n` +
-        `키링 디자인으로 쓰기 쉽고 단순하게 만들어 주세요.`;
+    function txt(id, text) {
+      document.getElementById(id).textContent = text || "(미작성)";
+    }
+    // 빈칸 처리 유틸 (빈칸이면 _ _ _ 출력)
+    function blank(value) {
+      return value ? `<span class="filled-blank">${value}</span>` : `<span class="filled-blank" style="color:#cbd5e1;">(미작성)</span>`;
     }
 
-    function updatePresentation() {
-      const mascotName = valueOf("mName") || "__________";
-      const idea = valueOf("mIdea") || "__________";
-      const look = valueOf("mLook") || "__________";
-      const adj1 = valueOf("mAdj1") || "__________";
-      const adj2 = valueOf("mAdj2") || "__________";
-      const color1 = valueOf("mColor1") || "__________";
-      const color2 = valueOf("mColor2") || "__________";
-      const feature = valueOf("mFeature") || "__________";
-      const shows = valueOf("mShows") || "__________";
-      const feeling = valueOf("mFeeling") || "__________";
-      const reason = valueOf("mReason") || "__________";
-
-      document.getElementById("presentationPreview").textContent =
-        `Hello, everyone.\n` +
-        `This is my Busan mascot.\n` +
-        `My mascot's name is ${mascotName}.\n` +
-        `I got the idea from ${idea}.\n` +
-        `It looks like ${look}.\n` +
-        `It is ${adj1} and ${adj2}.\n` +
-        `The colors are ${color1} and ${color2}.\n` +
-        `It has ${feature}.\n` +
-        `It shows Busan's ${shows}.\n` +
-        `I want people to feel ${feeling}.\n` +
-        `I like my mascot because ${reason}.\n` +
-        `Thank you.`;
-
-      document.getElementById("presentationKorean").textContent =
-        `안녕하세요, 여러분.\n` +
-        `이것은 제 부산 마스코트입니다.\n` +
-        `제 마스코트의 이름은 ${mascotName}입니다.\n` +
-        `저는 ${idea}에서 아이디어를 얻었습니다.\n` +
-        `그것은 ${look}처럼 보입니다.\n` +
-        `그것은 ${adj1}하고 ${adj2}합니다.\n` +
-        `색깔은 ${color1}와 ${color2}입니다.\n` +
-        `그것은 ${feature}을/를 가지고 있습니다.\n` +
-        `그것은 부산의 ${shows}을/를 보여 줍니다.\n` +
-        `저는 사람들이 ${feeling}을/를 느끼면 좋겠습니다.\n` +
-        `저는 ${reason} 때문에 제 마스코트가 좋습니다.\n` +
-        `감사합니다.`;
-    }
-
-    async function copyPrompt() {
-      const promptBox = document.getElementById("myPrompt");
-      const text = promptBox.value.trim();
-
-      if (!text) {
-        alert("먼저 AI 요청문을 작성해 주세요.");
-        promptBox.focus();
-        return;
-      }
-
+    function copyAiPrompt() {
+      const promptText = `Make a cute Busan mascot. I got the idea from ${val('aiIdea') || '___'}. Use ${val('aiColors') || '___'} colors. Make it ${val('aiMood') || '___'}. It has ${val('aiFeature') || '___'}. Draw it in a simple sticker style. Make it easy to use as a keyring design.`;
+      
+      const textArea = document.createElement("textarea");
+      textArea.value = promptText;
+      document.body.appendChild(textArea);
+      textArea.select();
+      
+      const btn = document.getElementById("copyBtn");
+      const originalText = btn.innerHTML;
+      
       try {
-        await navigator.clipboard.writeText(text);
-      } catch (error) {
-        promptBox.select();
-        document.execCommand("copy");
+        document.execCommand('copy');
+        btn.innerHTML = "✅ 복사 완료! AI에게 붙여넣기 하세요";
+        btn.style.background = "var(--mint)";
+        btn.style.color = "#1e293b";
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.style.background = ""; 
+          btn.style.color = "";
+        }, 3000);
+      } catch (err) {
+        btn.innerHTML = "❌ 복사 실패";
+        setTimeout(() => { btn.innerHTML = originalText; }, 3000);
       }
-
-      alert("영어 AI 요청문이 복사되었습니다.");
+      document.body.removeChild(textArea);
     }
 
-    function previewImage(event, previewId) {
+    function updateFinalSheet() {
+      // 1. 학생 정보
+      const grade = val("grade");
+      const classNo = val("classNo");
+      const num = val("studentNo");
+      const name = val("studentName") || "이름없음";
+      document.getElementById("finalStudent").textContent = `${grade}학년 ${classNo}반 ${num}번 ${name}`;
+
+      // 2. 조사 및 계획
+      txt("f_place", val("place"));
+      txt("f_food", val("food"));
+      txt("f_symbol", val("symbol"));
+      txt("f_mascotName", val("mascotName"));
+      txt("f_lookLike", val("lookLike"));
+      txt("f_adjectives", val("adjectives"));
+
+      // 3. AI 요청문 재조립
+      const aiHTML = `
+        Make a cute Busan mascot. 
+        I got the idea from ${blank(val('aiIdea'))}. 
+        Use ${blank(val('aiColors'))} colors. 
+        Make it ${blank(val('aiMood'))}. 
+        It has ${blank(val('aiFeature'))}. 
+        Draw it in a simple sticker style. Make it easy to use as a keyring design.
+      `;
+      document.getElementById("f_aiPrompt").innerHTML = aiHTML;
+
+      // 4. 발표문 재조립
+      const ptHTML = `
+        Hello, everyone. This is my Busan mascot. 
+        My mascot's name is ${blank(val('ptName'))}. 
+        I got the idea from ${blank(val('ptIdea'))}. 
+        It looks like ${blank(val('ptLook'))}. 
+        It is ${blank(val('ptMood'))}. 
+        The colors are ${blank(val('ptColors'))}. 
+        It has ${blank(val('ptFeature'))}. 
+        I like my mascot because ${blank(val('ptReason'))}. 
+        Thank you.
+      `;
+      document.getElementById("f_presentation").innerHTML = ptHTML;
+
+      // 5. 피드백 및 이미지
+      txt("f_favoritePart", val("favoritePart"));
+      txt("f_improveNext", val("improveNext"));
+      setFinalImage("ai", "finalAiImage", "finalAiEmpty");
+      setFinalImage("keyring", "finalKeyringImage", "finalKeyringEmpty");
+    }
+
+    function setFinalImage(key, imgId, emptyId) {
+      const img = document.getElementById(imgId);
+      const empty = document.getElementById(emptyId);
+      if (imageData[key]) {
+        img.src = imageData[key];
+        img.style.display = "block";
+        empty.style.display = "none";
+      } else {
+        img.removeAttribute("src");
+        img.style.display = "none";
+        empty.style.display = "flex";
+      }
+    }
+
+    function handleImage(event, key) {
       const file = event.target.files[0];
-      const preview = document.getElementById(previewId);
+      const preview = document.getElementById(key === "ai" ? "aiPreview" : "keyringPreview");
 
       if (!file) {
-        preview.removeAttribute("src");
+        imageData[key] = "";
         preview.style.display = "none";
+        updateFinalSheet();
         return;
       }
 
-      preview.src = URL.createObjectURL(file);
-      preview.style.display = "block";
-    }
-
-    function buildStudentName() {
-      const grade = valueOf("sGrade");
-      const classNo = valueOf("sClass");
-      const number = valueOf("sNum");
-      const name = valueOf("sName");
-      const parts = [];
-
-      if (grade) parts.push(`${grade}학년`);
-      if (classNo) parts.push(`${classNo}반`);
-      if (number) parts.push(`${number}번`);
-      if (name) parts.push(name);
-
-      return parts.join(" ");
-    }
-
-    function resizeImageToBase64(file) {
-      return new Promise(function(resolve, reject) {
-        if (!file) {
-          resolve("");
-          return;
-        }
-
-        if (!file.type.startsWith("image/")) {
-          reject(new Error("이미지 파일만 업로드할 수 있습니다."));
-          return;
-        }
-
-        const reader = new FileReader();
-
-        reader.onload = function(event) {
-          const img = new Image();
-
-          img.onload = function() {
-            const scale = Math.min(1, MAX_IMAGE_EDGE / Math.max(img.width, img.height));
-            const canvas = document.createElement("canvas");
-            canvas.width = Math.max(1, Math.round(img.width * scale));
-            canvas.height = Math.max(1, Math.round(img.height * scale));
-
-            const ctx = canvas.getContext("2d");
-            ctx.fillStyle = "#ffffff";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-            resolve(canvas.toDataURL("image/jpeg", IMAGE_QUALITY));
-          };
-
-          img.onerror = function() {
-            reject(new Error("이미지를 읽을 수 없습니다."));
-          };
-
-          img.src = event.target.result;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement("canvas");
+          const maxEdge = 1000;
+          let scale = 1;
+          if (img.width > maxEdge || img.height > maxEdge) {
+            scale = maxEdge / Math.max(img.width, img.height);
+          }
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          const ctx = canvas.getContext("2d");
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0,0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          
+          imageData[key] = canvas.toDataURL("image/jpeg", 0.9);
+          preview.src = imageData[key];
+          preview.style.display = "block";
+          updateFinalSheet();
         };
-
-        reader.onerror = function() {
-          reject(new Error("파일을 읽을 수 없습니다."));
-        };
-
-        reader.readAsDataURL(file);
-      });
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
     }
 
-    async function submitData() {
-      if (!valueOf("sName")) {
-        alert("이름을 입력해 주세요.");
-        document.getElementById("sName").focus();
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="spinner"></span>이미지 정리 중...';
-      submitStatus.textContent = "사진 용량을 줄여서 업로드 준비 중입니다.";
+    async function downloadJpg() {
+      updateFinalSheet();
+      const status = document.getElementById("downloadStatus");
+      const target = document.getElementById("finalSheet");
+      
+      status.textContent = "✨ 귀여운 학습지를 만들고 있어요! 잠시만 기다려주세요...";
 
       try {
-        const fileAI = document.getElementById("uploadAI").files[0];
-        const fileKeyring = document.getElementById("uploadKeyring").files[0];
-        const imageBase64Ai = await resizeImageToBase64(fileAI);
-        const imageBase64Keyring = await resizeImageToBase64(fileKeyring);
-
-        const data = {
-          studentName: buildStudentName(),
-          mascotName: valueOf("mName") || valueOf("planName"),
-          inspiredBy: valueOf("mIdea") || valueOf("planIdea"),
-          busanCategory: valueOf("busanCategory"),
-          adj1: valueOf("mAdj1"),
-          adj2: valueOf("mAdj2"),
-          color1: valueOf("mColor1"),
-          color2: valueOf("mColor2"),
-          appearance: valueOf("mLook") || valueOf("planLook"),
-          specialFeature: valueOf("mFeature") || valueOf("planFeature"),
-          shows: valueOf("mShows"),
-          feeling: valueOf("mFeeling") || valueOf("busanMood"),
-          reason: valueOf("mReason") || valueOf("busanReason"),
-          myPrompt: valueOf("myPrompt"),
-          presentationScript: document.getElementById("presentationPreview").textContent,
-          favoritePart: valueOf("favoritePart"),
-          improveNext: valueOf("improveNext"),
-          imageBase64_ai: imageBase64Ai,
-          imageBase64_keyring: imageBase64Keyring
-        };
-
-        submitBtn.innerHTML = '<span class="spinner"></span>갤러리에 제출 중...';
-        submitStatus.textContent = "제출 요청을 보내고 있습니다. 사진이 있으면 조금 더 걸릴 수 있습니다.";
-
-        await fetch(SCRIPT_URL, {
-          method: "POST",
-          mode: "no-cors",
-          body: JSON.stringify(data)
+        const canvas = await html2canvas(target, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: "#ffffff",
+          logging: false
         });
 
-        submitBtn.textContent = "제출 요청 완료";
-        submitStatus.textContent = "제출 요청을 보냈습니다. 잠시 후 갤러리를 새로고침합니다.";
+        canvas.toBlob(function(blob) {
+          const link = document.createElement("a");
+          const nameStr = val("studentName") || "이름없음";
+          link.href = URL.createObjectURL(blob);
+          link.download = `${val("grade")}학년_${val("classNo")}반_${val("studentNo")}번_${nameStr}_학습지.jpg`;
+          
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(link.href);
+          
+          status.textContent = "🎉 학습지 다운로드가 완료되었습니다!";
+          setTimeout(() => { status.textContent = ""; }, 4000);
+        }, "image/jpeg", 0.95);
 
-        setTimeout(function() {
-          submitBtn.disabled = false;
-          submitBtn.textContent = "갤러리에 제출하기";
-          switchTab("gallery");
-        }, 2200);
-      } catch (error) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "다시 제출하기";
-        submitStatus.textContent = "오류: " + error.message;
-        alert("오류: " + error.message);
+      } catch (err) {
+        status.textContent = "앗! 저장 중 오류가 발생했어요. 다시 시도해주세요.";
       }
     }
 
-    function getGalleryItemsJsonp() {
-      return new Promise(function(resolve, reject) {
-        const callbackName = "galleryCallback_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-        const script = document.createElement("script");
-        const timer = setTimeout(function() {
-          cleanup();
-          reject(new Error("응답 시간이 초과되었습니다. Apps Script 웹앱 주소가 맞는지, 그리고 새 버전으로 배포했는지 확인해 주세요."));
-        }, 15000);
-
-        function cleanup() {
-          clearTimeout(timer);
-          delete window[callbackName];
-          script.remove();
-        }
-
-        window[callbackName] = function(data) {
-          cleanup();
-
-          if (Array.isArray(data)) {
-            resolve(data);
-            return;
-          }
-
-          if (data && data.result === "error") {
-            reject(new Error(data.message || "Apps Script 오류가 발생했습니다."));
-            return;
-          }
-
-          resolve(data && Array.isArray(data.items) ? data.items : []);
-        };
-
-        script.onerror = function() {
-          cleanup();
-          reject(new Error("갤러리 데이터를 불러오지 못했습니다. Apps Script 웹앱이 JSONP 형식으로 응답하지 않고 있습니다."));
-        };
-
-        const query = new URLSearchParams({
-          callback: callbackName,
-          t: Date.now().toString()
-        });
-
-        script.src = SCRIPT_URL + "?" + query.toString();
-        document.body.appendChild(script);
-      });
-    }
-
-    async function loadGallery() {
-      galleryGrid.innerHTML = '<div class="empty-state">갤러리를 불러오는 중입니다...</div>';
-
-      try {
-        const items = await getGalleryItemsJsonp();
-
-        if (!Array.isArray(items) || items.length === 0) {
-          galleryGrid.innerHTML = '<div class="empty-state">아직 제출된 작품이 없습니다. 방금 제출했다면 5초 뒤 새로고침을 눌러 주세요.</div>';
-          return;
-        }
-
-        galleryGrid.innerHTML = items.map(galleryCardHtml).join("");
-      } catch (error) {
-        galleryGrid.innerHTML =
-          `<div class="error-state">오류: ${escapeHtml(error.message)}<br>` +
-          `확인 방법: Apps Script 웹앱 주소 뒤에 <strong>?callback=test</strong>를 붙여 열었을 때 ` +
-          `<strong>test([...]);</strong>처럼 보여야 합니다.<br>` +
-          `JSON만 보이거나 오류 페이지가 보이면 Apps Script 코드 저장 후 <strong>배포 관리 → 새 버전 → 배포</strong>가 필요합니다.</div>`;
-      }
-    }
-
-    function galleryCardHtml(item) {
-      const detail = [
-        item.inspiredBy ? `아이디어를 얻은 것: ${item.inspiredBy}` : "",
-        item.adjectives ? `성격/느낌: ${item.adjectives}` : "",
-        item.specialFeature ? `특징: ${item.specialFeature}` : "",
-        item.feeling ? `주고 싶은 느낌: ${item.feeling}` : "",
-        item.favoritePart ? `마음에 드는 부분: ${item.favoritePart}` : ""
-      ].filter(Boolean).join("\n");
-
-      return `
-        <article class="gallery-card">
-          <div class="gallery-name">${escapeHtml(item.studentName || "익명")}</div>
-          <h3 class="gallery-title">${escapeHtml(item.mascotName || "이름 없는 마스코트")}</h3>
-          <div class="image-pair">
-            <div class="gallery-image-block">
-              <p>AI 마스코트</p>
-              ${imageHtml(item.imageUrl_ai, "AI 마스코트 이미지")}
-            </div>
-            <div class="gallery-image-block">
-              <p>완성 키링</p>
-              ${imageHtml(item.imageUrl_keyring, "키링 사진")}
-            </div>
-          </div>
-          ${detail ? `<div class="gallery-detail">${escapeHtml(detail)}</div>` : ""}
-          <div class="prompt-card"><strong>발표 스크립트</strong><br>${escapeHtml(item.presentationScript || "입력된 발표 스크립트가 없습니다.")}</div>
-        </article>
-      `;
-    }
-
-    function imageHtml(url, alt) {
-      if (!url) {
-        return '<div class="empty-image">사진 없음</div>';
-      }
-
-      return `<img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" loading="lazy">`;
-    }
-
-    function escapeHtml(value) {
-      return String(value || "").replace(/[&<>"']/g, function(ch) {
-        return {
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#039;"
-        }[ch];
-      });
-    }
-
-    document.querySelectorAll(".prompt-field").forEach(function(input) {
-      input.addEventListener("input", updatePrompt);
+    // 모든 입력창 실시간 갱신 이벤트 바인딩
+    document.querySelectorAll(".live-field").forEach(field => {
+      field.addEventListener("input", updateFinalSheet);
+      field.addEventListener("change", updateFinalSheet);
     });
 
-    document.querySelectorAll(".writing-field").forEach(function(input) {
-      input.addEventListener("input", updatePresentation);
-    });
-
-    document.getElementById("planName").addEventListener("input", function(event) {
-      if (!valueOf("mName")) document.getElementById("mName").value = event.target.value;
-      updatePresentation();
-    });
-
-    document.getElementById("planIdea").addEventListener("input", function(event) {
-      if (!valueOf("mIdea")) document.getElementById("mIdea").value = event.target.value;
-      if (!valueOf("pIdea")) document.getElementById("pIdea").value = event.target.value;
-      updatePrompt();
-      updatePresentation();
-    });
-
-    document.getElementById("planLook").addEventListener("input", function(event) {
-      if (!valueOf("mLook")) document.getElementById("mLook").value = event.target.value;
-      updatePresentation();
-    });
-
-    document.getElementById("planColors").addEventListener("input", function(event) {
-      if (!valueOf("pColor")) document.getElementById("pColor").value = event.target.value;
-      updatePrompt();
-    });
-
-    document.getElementById("planFeature").addEventListener("input", function(event) {
-      if (!valueOf("mFeature")) document.getElementById("mFeature").value = event.target.value;
-      if (!valueOf("pFeature")) document.getElementById("pFeature").value = event.target.value;
-      updatePrompt();
-      updatePresentation();
-    });
-
-    document.getElementById("planPersonality").addEventListener("input", function(event) {
-      const words = event.target.value.split(/\s+and\s+|,\s*/).filter(Boolean);
-      if (!valueOf("mAdj1") && words[0]) document.getElementById("mAdj1").value = words[0];
-      if (!valueOf("mAdj2") && words[1]) document.getElementById("mAdj2").value = words[1];
-      if (!valueOf("pMood")) document.getElementById("pMood").value = event.target.value;
-      updatePrompt();
-      updatePresentation();
-    });
-
-    updatePrompt();
-    updatePresentation();
+    updateFinalSheet(); // 초기 렌더링
   </script>
 </body>
 </html>
