@@ -596,18 +596,38 @@
             <span class="badge">조사</span>
           </div>
           <div class="activity-body">
-            <p class="note">`inspired by`는 어려운 말이라서 이 학습지에서는 <strong>아이디어를 얻은 것</strong>이라고 생각하면 됩니다.</p>
-            <div class="word-bank" aria-label="단어 예시">
-              <span>sea 바다</span>
+            <p class="note">아래 예시에서 하나를 고르거나, 내가 알고 있는 부산의 다른 소재를 적어도 됩니다.</p>
+            <div class="word-bank" aria-label="장소 예시">
+              <span>장소: Haeundae Beach 해운대</span>
+              <span>Gwangalli Beach 광안리</span>
+              <span>Gamcheon Culture Village 감천문화마을</span>
+              <span>Jagalchi Market 자갈치시장</span>
+              <span>Taejongdae 태종대</span>
+              <span>Busan Tower 부산타워</span>
+              <span>Gwangandaegyo Bridge 광안대교</span>
+              <span>Songdo Cable Car 송도 케이블카</span>
+            </div>
+            <div class="word-bank" aria-label="음식 예시">
+              <span>음식: fish cake 어묵</span>
+              <span>milmyeon 밀면</span>
+              <span>ssiat hotteok 씨앗호떡</span>
+              <span>pork soup 돼지국밥</span>
+              <span>seafood 해산물</span>
+              <span>grilled clam 조개구이</span>
+              <span>eomuk 어묵</span>
+              <span>wheat noodles 밀면</span>
+            </div>
+            <div class="word-bank" aria-label="상징 예시">
+              <span>상징: sea 바다</span>
               <span>seagull 갈매기</span>
+              <span>wave 파도</span>
               <span>bridge 다리</span>
               <span>fireworks 불꽃</span>
-              <span>fish cake 어묵</span>
-              <span>milmyeon 밀면</span>
-              <span>bright 밝은</span>
-              <span>friendly 친근한</span>
-              <span>lively 활기찬</span>
-              <span>peaceful 평화로운</span>
+              <span>ship 배</span>
+              <span>lighthouse 등대</span>
+              <span>mountain 산</span>
+              <span>blue color 파란색</span>
+              <span>festival 축제</span>
             </div>
 
             <div class="grid-3">
@@ -852,7 +872,7 @@
   </main>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyleM1GfHrTbbclkdwzGP-hdzs5HHh20yLqI_7fwUZnfBc-jNinPX6koUsAMUJXGiOJ/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1-ynOUkEAyzHFI8ri0tFyI5fguI-9cJwFOJ5fZyHE3HJlJuKhJOYYsvhLThDbx0Ju/exec";
     const MAX_IMAGE_EDGE = 1200;
     const IMAGE_QUALITY = 0.82;
 
@@ -1117,7 +1137,7 @@
         const script = document.createElement("script");
         const timer = setTimeout(function() {
           cleanup();
-          reject(new Error("응답 시간이 초과되었습니다. Apps Script를 v3 코드로 저장하고 새 버전으로 배포했는지 확인해 주세요."));
+          reject(new Error("응답 시간이 초과되었습니다. Apps Script 웹앱 주소가 맞는지, 그리고 새 버전으로 배포했는지 확인해 주세요."));
         }, 15000);
 
         function cleanup() {
@@ -1144,7 +1164,7 @@
 
         script.onerror = function() {
           cleanup();
-          reject(new Error("갤러리 데이터를 불러오지 못했습니다. Apps Script doGet 코드가 아직 JSONP callback으로 배포되지 않았을 가능성이 큽니다."));
+          reject(new Error("갤러리 데이터를 불러오지 못했습니다. Apps Script 웹앱이 JSONP 형식으로 응답하지 않고 있습니다."));
         };
 
         const query = new URLSearchParams({
@@ -1170,7 +1190,11 @@
 
         galleryGrid.innerHTML = items.map(galleryCardHtml).join("");
       } catch (error) {
-        galleryGrid.innerHTML = `<div class="error-state">오류: ${escapeHtml(error.message)}<br>Apps Script 코드를 v3로 바꾼 뒤, 배포 메뉴에서 새 버전으로 다시 배포해야 합니다.</div>`;
+        galleryGrid.innerHTML =
+          `<div class="error-state">오류: ${escapeHtml(error.message)}<br>` +
+          `확인 방법: Apps Script 웹앱 주소 뒤에 <strong>?callback=test</strong>를 붙여 열었을 때 ` +
+          `<strong>test([...]);</strong>처럼 보여야 합니다.<br>` +
+          `JSON만 보이거나 오류 페이지가 보이면 Apps Script 코드 저장 후 <strong>배포 관리 → 새 버전 → 배포</strong>가 필요합니다.</div>`;
       }
     }
 
