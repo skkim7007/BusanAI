@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>내 손안의 부산 | AI 마스코트 공유 보드</title>
+
+  <!-- Apps Script 웹앱으로 자동 이동 -->
+  <meta
+    http-equiv="refresh"
+    content="1; url=https://script.google.com/macros/s/AKfycbwGdwaGG8WOWTkS8VftrCm7E8hPK8LNt8eyc3tYutitiX8D2Cuj9KpcZfViU9ELy0RK/exec"
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+      background:
+        radial-gradient(circle at top left, #dbeafe, transparent 32rem),
+        radial-gradient(circle at top right, #fef3c7, transparent 28rem),
+        #f4f7fb;
+      color: #172033;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: min(720px, 100%);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #d8e0ec;
+      border-radius: 28px;
+      padding: 36px 28px;
+      box-shadow: 0 18px 48px rgba(15, 23, 42, 0.12);
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      margin: 14px auto 0;
+      max-width: 560px;
+      color: #64748b;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    .steps {
+      margin: 28px auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .step {
+      background: #f8fafc;
+      border: 1px solid #d8e0ec;
+      border-radius: 18px;
+      padding: 14px 10px;
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #2563eb;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 14px 22px;
+      border-radius: 999px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      font-weight: 800;
+      transition: 0.15s ease;
+    }
+
+    .button:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .notice {
+      margin-top: 22px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      line-height: 1.6;
+      font-size: 0.94rem;
+      text-align: left;
+    }
+
+    .small {
+      margin-top: 18px;
+      color: #64748b;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 640px) {
+      .steps {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .card {
+        padding: 28px 20px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .steps {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <h1>내 손안의 부산</h1>
+
+    <p class="subtitle">
+      중학교 2학년 영어·예술 융합 수업<br />
+      AI 마스코트 만들기와 슈링클스 키링 제작 공유 보드로 이동합니다.
+    </p>
+
+    <section class="steps" aria-label="수업 활동 순서">
+      <div class="step">
+        <strong>1단계</strong>
+        부산 자료 조사
+      </div>
+
+      <div class="step">
+        <strong>2단계</strong>
+        AI 캐릭터 만들기
+      </div>
+
+      <div class="step">
+        <strong>3단계</strong>
+        영어 소개서 작성
+      </div>
+
+      <div class="step">
+        <strong>4단계</strong>
+        키링 완성작 공유
+      </div>
+    </section>
+
+    <a
+      class="button"
+      href="https://script.google.com/macros/s/AKfycbwGdwaGG8WOWTkS8VftrCm7E8hPK8LNt8eyc3tYutitiX8D2Cuj9KpcZfViU9ELy0RK/exec"
+    >
+      공유 보드 열기
+    </a>
+
+    <div class="notice">
+      <strong>안전 안내</strong><br />
+      슈링클스는 굽는 과정에서 매우 뜨겁습니다.
+      오븐이나 히팅기는 선생님만 사용하고, 학생들은 작품이 충분히 식은 뒤 키링 고리를 연결합니다.
+    </div>
+
+    <p class="small">
+      잠시 후 자동으로 공유 보드가 열립니다.<br />
+      자동으로 이동하지 않으면 위의 <strong>공유 보드 열기</strong> 버튼을 눌러 주세요.
+    </p>
+  </main>
+</body>
+</html>
