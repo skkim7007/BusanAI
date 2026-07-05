@@ -1,688 +1,442 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>내 손안의 부산 | AI 마스코트 공유 보드</title>
-
-  <style>
-    :root {
-      --bg: #f4f7fb;
-      --card: #ffffff;
-      --text: #172033;
-      --muted: #64748b;
-      --line: #d8e0ec;
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --danger: #ef4444;
-      --warning: #f59e0b;
-      --shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-      --radius: 18px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top left, #dbeafe, transparent 32rem),
-        radial-gradient(circle at top right, #fef3c7, transparent 28rem),
-        var(--bg);
-    }
-
-    header {
-      padding: 28px 20px 18px;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: clamp(1.6rem, 4vw, 2.5rem);
-      letter-spacing: -0.04em;
-    }
-
-    header p {
-      margin: 10px auto 0;
-      max-width: 780px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .toolbar {
-      width: min(1180px, calc(100% - 32px));
-      margin: 0 auto 18px;
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .search {
-      width: 100%;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.88);
-      border-radius: 999px;
-      padding: 13px 18px;
-      font-size: 1rem;
-      outline: none;
-    }
-
-    button {
-      border: 0;
-      background: var(--primary);
-      color: white;
-      padding: 12px 16px;
-      border-radius: 999px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.15s ease;
-      white-space: nowrap;
-    }
-
-    button:hover {
-      background: var(--primary-dark);
-      transform: translateY(-1px);
-    }
-
-    button.secondary {
-      background: #334155;
-    }
-
-    button.ghost {
-      background: transparent;
-      color: var(--muted);
-      border: 1px solid var(--line);
-    }
-
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.65;
-      transform: none;
-    }
-
-    .status {
-      width: min(1180px, calc(100% - 32px));
-      margin: 0 auto 16px;
-      background: rgba(255, 255, 255, 0.8);
-      border: 1px solid var(--line);
-      color: var(--muted);
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-size: 0.9rem;
-      text-align: center;
-    }
-
-    .board {
-      width: min(1180px, calc(100% - 32px));
-      margin: 0 auto 36px;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(240px, 1fr));
-      gap: 16px;
-      align-items: start;
-    }
-
-    .column {
-      background: rgba(255, 255, 255, 0.74);
-      border: 1px solid rgba(216, 224, 236, 0.9);
-      border-radius: 24px;
-      padding: 14px;
-      min-height: 520px;
-      box-shadow: var(--shadow);
-    }
-
-    .column-header {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .column-title {
-      margin: 0;
-      font-size: 1.05rem;
-      line-height: 1.3;
-    }
-
-    .column-desc {
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: 0.88rem;
-      line-height: 1.45;
-    }
-
-    .add-small {
-      flex: 0 0 auto;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      padding: 0;
-      font-size: 1.3rem;
-      line-height: 1;
-    }
-
-    .cards {
-      display: grid;
-      gap: 10px;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 12px;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
-      overflow: hidden;
-    }
-
-    .name {
-      font-weight: 800;
-      word-break: break-word;
-    }
-
-    .time {
-      color: var(--muted);
-      font-size: 0.78rem;
-      margin-top: 2px;
-    }
-
-    .card p {
-      margin: 10px 0 0;
-      color: #263247;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .card img {
-      width: 100%;
-      max-height: 220px;
-      object-fit: contain;
-      border-radius: 14px;
-      margin-top: 10px;
-      background: #f8fafc;
-      border: 1px solid var(--line);
-    }
-
-    .card-actions {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .like {
-      background: #eef2ff;
-      color: #3730a3;
-      border: 0;
-      padding: 8px 10px;
-      font-size: 0.9rem;
-    }
-
-    .delete {
-      background: transparent;
-      color: var(--danger);
-      border: 1px solid #fecaca;
-      padding: 7px 10px;
-      font-size: 0.82rem;
-    }
-
-    dialog {
-      border: 0;
-      border-radius: 24px;
-      width: min(560px, calc(100% - 28px));
-      padding: 0;
-      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
-    }
-
-    dialog::backdrop {
-      background: rgba(15, 23, 42, 0.45);
-      backdrop-filter: blur(2px);
-    }
-
-    .modal {
-      padding: 22px;
-      background: white;
-    }
-
-    .modal h2 {
-      margin: 0 0 4px;
-    }
-
-    .hint {
-      color: var(--muted);
-      margin: 0 0 18px;
-      line-height: 1.5;
-    }
-
-    label {
-      display: block;
-      margin: 14px 0 6px;
-      font-weight: 800;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 12px;
-      font: inherit;
-      outline: none;
-    }
-
-    textarea {
-      min-height: 130px;
-      resize: vertical;
-    }
-
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .templates {
-      margin: 16px auto 40px;
-      width: min(1180px, calc(100% - 32px));
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-    }
-
-    .template-box {
-      background: rgba(255, 255, 255, 0.78);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-    }
-
-    .template-box h3 {
-      margin: 0 0 10px;
-    }
-
-    .template-box pre {
-      white-space: pre-wrap;
-      margin: 0;
-      background: #f8fafc;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 14px;
-      line-height: 1.55;
-      color: #334155;
-      font-family: inherit;
-    }
-
-    .safe {
-      border-left: 8px solid var(--warning);
-    }
-
-    @media (max-width: 1040px) {
-      .board {
-        grid-template-columns: repeat(2, minmax(240px, 1fr));
-      }
-
-      .templates {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .toolbar {
-        grid-template-columns: 1fr;
-      }
-
-      .board {
-        grid-template-columns: 1fr;
-      }
-
-      .column {
-        min-height: auto;
-      }
-
-      .modal-actions {
-        flex-direction: column;
-      }
-
-      .modal-actions button {
-        width: 100%;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 손안의 부산 🌊 마스코트 만들기</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f0f8ff;
+            background-image: radial-gradient(#bae6fd 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        h1, h2, h3, .jua-font {
+            font-family: 'Jua', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 2px solid #e0f2fe;
+        }
+        .section-title {
+            background-color: #e0f2fe;
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            color: #0369a1;
+            border: 2px dashed #7dd3fc;
+        }
+        .fill-blank {
+            border: none;
+            border-bottom: 2px dashed #60a5fa;
+            background: rgba(239, 246, 255, 0.5);
+            font-family: 'Jua', sans-serif;
+            font-size: 1.2rem;
+            text-align: center;
+            color: #1d4ed8;
+            outline: none;
+            transition: all 0.3s ease;
+            padding: 4px 8px;
+            border-radius: 8px;
+            margin: 0 4px;
+            width: 120px;
+        }
+        .fill-blank:focus {
+            border-bottom: 2px solid #f97316;
+            background-color: #fff7ed;
+            box-shadow: 0 0 0 3px rgba(253, 186, 116, 0.4);
+            transform: scale(1.05);
+        }
+        .prompt-box {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 15px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background-color: #e2e8f0;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover { background-color: #cbd5e1; }
+        
+        /* 탭 스타일 */
+        .tab-btn {
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            background-color: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
+        }
+        .tab-btn.inactive {
+            background-color: #e2e8f0;
+            color: #64748b;
+        }
+        .tab-btn.inactive:hover {
+            background-color: #cbd5e1;
+        }
+        
+        /* 스피너 애니메이션 */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s ease-in-out infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+    </style>
 </head>
+<body class="p-4 md:p-8 text-gray-800">
 
-<body>
-  <header>
-    <h1>내 손안의 부산: AI 마스코트 공유 보드</h1>
-    <p>
-      중학교 2학년 영어·예술 융합 수업용 보드입니다.
-      활동별로 조사 내용, AI 캐릭터, 영어 소개문, 완성 키링을 공유하세요.
-    </p>
-  </header>
+    <div class="max-w-5xl mx-auto">
+        <!-- 헤더 -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl text-blue-600 mb-3 drop-shadow-sm">🌊 내 손안의 부산 🌊</h1>
+            <p class="text-xl jua-font text-blue-500">AI 마스코트 만들기와 영어 키링 제작</p>
+        </header>
 
-  <div class="toolbar">
-    <input
-      id="searchInput"
-      class="search"
-      type="search"
-      placeholder="이름, 장소, 마스코트 이름, 영어 문장 검색하기"
-    >
-    <button onclick="openModal()">+ 게시물 올리기</button>
-    <button class="secondary" onclick="loadPosts()">새로고침</button>
-  </div>
+        <!-- 탭 네비게이션 -->
+        <div class="flex justify-center space-x-4 mb-8">
+            <button id="tab-worksheet" onclick="switchTab('worksheet')" class="tab-btn active px-6 py-3 rounded-full text-lg jua-font font-bold">
+                📝 활동지 작성
+            </button>
+            <button id="tab-gallery" onclick="switchTab('gallery')" class="tab-btn inactive px-6 py-3 rounded-full text-lg jua-font font-bold">
+                🖼️ 우리 반 갤러리
+            </button>
+        </div>
 
-  <div id="status" class="status">게시물을 불러오는 중...</div>
-
-  <main class="board" id="board"></main>
-
-  <section class="templates">
-    <div class="template-box">
-      <h3>영어 소개문 틀</h3>
-      <pre>Hello.
-My mascot's name is __________.
-It is inspired by __________.
-It is __________ and __________.
-Its colors are __________ and __________.
-It shows __________.
-I like my mascot because it is __________.</pre>
-    </div>
-
-    <div class="template-box safe">
-      <h3>슈링클스 안전 수칙</h3>
-      <pre>1. 오븐이나 히팅기를 만지지 않습니다.
-2. 구워진 슈링클스는 바로 만지지 않습니다.
-3. 뜨거운 작품은 선생님이 집게와 장갑으로 꺼냅니다.
-4. 충분히 식은 뒤 키링 고리를 답니다.
-5. 뜨거운 도구로 장난치지 않습니다.</pre>
-    </div>
-  </section>
-
-  <dialog id="postDialog">
-    <form class="modal" method="dialog" id="postForm">
-      <h2>게시물 올리기</h2>
-      <p class="hint">
-        활동을 고르고 내용을 작성하세요.
-        이미지는 파일 업로드가 아니라 이미지 주소를 붙여넣는 방식입니다.
-      </p>
-
-      <label for="stage">활동 선택</label>
-      <select id="stage" required>
-        <option value="research">1. 부산 자료 조사</option>
-        <option value="ai">2. AI 캐릭터 공유</option>
-        <option value="intro">3. 영어 소개서</option>
-        <option value="keyring">4. 슈링클스 키링 완성</option>
-      </select>
-
-      <label for="studentName">이름</label>
-      <input id="studentName" maxlength="30" placeholder="예: 김수경" required>
-
-      <label for="title">제목</label>
-      <input id="title" maxlength="60" placeholder="예: 해운대 갈매기 마스코트" required>
-
-      <label for="content">내용</label>
-      <textarea
-        id="content"
-        maxlength="700"
-        placeholder="조사 내용, AI 프롬프트, 영어 소개문, 느낀 점 등을 적어 보세요."
-        required
-      ></textarea>
-
-      <label for="imageUrl">이미지 주소</label>
-      <input id="imageUrl" placeholder="https://...">
-
-      <div class="modal-actions">
-        <button type="button" class="ghost" onclick="closeModal()">취소</button>
-        <button id="submitBtn" type="submit">올리기</button>
-      </div>
-    </form>
-  </dialog>
-
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbwGdwaGG8WOWTkS8VftrCm7E8hPK8LNt8eyc3tYutitiX8D2Cuj9KpcZfViU9ELy0RK/exec";
-
-    const stages = [
-      {
-        id: "research",
-        title: "1. 부산 자료 조사",
-        desc: "장소, 음식, 상징, 색깔, 느낌을 조사해서 공유해요."
-      },
-      {
-        id: "ai",
-        title: "2. AI 캐릭터 공유",
-        desc: "Canva 등 AI로 만든 캐릭터와 사용한 프롬프트를 올려요."
-      },
-      {
-        id: "intro",
-        title: "3. 영어 소개서",
-        desc: "쉬운 영어 문장으로 마스코트를 소개해요."
-      },
-      {
-        id: "keyring",
-        title: "4. 키링 완성작",
-        desc: "슈링클스 키링 사진과 제작 소감을 공유해요."
-      }
-    ];
-
-    let posts = [];
-
-    const board = document.getElementById("board");
-    const dialog = document.getElementById("postDialog");
-    const form = document.getElementById("postForm");
-    const searchInput = document.getElementById("searchInput");
-    const statusBox = document.getElementById("status");
-    const submitBtn = document.getElementById("submitBtn");
-
-    function callApi(action, params = {}) {
-      return new Promise(function(resolve, reject) {
-        const callbackName = "jsonpCallback_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-
-        const query = new URLSearchParams({
-          action: action,
-          callback: callbackName,
-          ...params
-        });
-
-        const script = document.createElement("script");
-        script.src = API_URL + "?" + query.toString();
-
-        window[callbackName] = function(data) {
-          delete window[callbackName];
-          script.remove();
-
-          if (!data.ok) {
-            reject(new Error(data.error || "알 수 없는 오류가 발생했습니다."));
-            return;
-          }
-
-          resolve(data);
-        };
-
-        script.onerror = function() {
-          delete window[callbackName];
-          script.remove();
-          reject(new Error("Apps Script API에 연결할 수 없습니다."));
-        };
-
-        document.body.appendChild(script);
-      });
-    }
-
-    function openModal(stageId = "") {
-      if (stageId) {
-        document.getElementById("stage").value = stageId;
-      }
-
-      dialog.showModal();
-    }
-
-    function closeModal() {
-      form.reset();
-      dialog.close();
-    }
-
-    function setStatus(message) {
-      statusBox.textContent = message;
-    }
-
-    async function loadPosts() {
-      setStatus("게시물을 불러오는 중...");
-
-      try {
-        const data = await callApi("getPosts");
-        posts = data.posts || [];
-        render();
-        setStatus(`총 ${posts.length}개의 게시물이 있습니다.`);
-      } catch (error) {
-        setStatus("오류: " + error.message);
-      }
-    }
-
-    function escapeHtml(str = "") {
-      return String(str).replace(/[&<>"']/g, function(ch) {
-        return {
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#039;"
-        }[ch];
-      });
-    }
-
-    function render() {
-      const keyword = searchInput.value.trim().toLowerCase();
-
-      board.innerHTML = stages.map(function(stage) {
-        const filtered = posts
-          .filter(function(post) {
-            return post.stage === stage.id;
-          })
-          .filter(function(post) {
-            const text = `${post.studentName} ${post.title} ${post.content}`.toLowerCase();
-            return !keyword || text.includes(keyword);
-          });
-
-        return `
-          <section class="column">
-            <div class="column-header">
-              <div>
-                <h2 class="column-title">${stage.title}</h2>
-                <p class="column-desc">${stage.desc}</p>
-              </div>
-              <button class="add-small" onclick="openModal('${stage.id}')" title="이 활동에 올리기">+</button>
+        <!-- 활동지 탭 콘텐츠 -->
+        <div id="worksheet-content" class="space-y-8">
+            
+            <!-- 학생 정보 -->
+            <div class="glass-panel p-6 md:p-8 text-center flex justify-center items-center flex-wrap gap-4">
+                <span class="text-xl jua-font text-gray-700">학년 반 번호 & 이름:</span>
+                <input type="text" id="studentName" class="fill-blank !width-[200px] text-center" placeholder="예: 2학년 3반 홍길동">
             </div>
 
-            <div class="cards">
-              ${
-                filtered.length
-                  ? filtered.map(cardHtml).join("")
-                  : `<p class="column-desc">아직 게시물이 없습니다.</p>`
-              }
+            <!-- Activity 1 -->
+            <section class="glass-panel p-6 md:p-8">
+                <h2 class="section-title">Activity 1. What represents Busan?</h2>
+                <p class="mb-4 text-gray-600">부산을 나타내는 것을 자유롭게 살펴보고 기억해두세요!</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <div class="font-bold text-blue-800 mb-2">🏖️ Place (장소)</div>
+                        <ul class="text-sm space-y-1 text-gray-600">
+                            <li>Haeundae Beach (해운대 해변)</li>
+                            <li>Gwangalli (광안리)</li>
+                            <li>Gamcheon Culture Village (감천문화마을)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-xl border border-orange-100">
+                        <div class="font-bold text-orange-800 mb-2">🍢 Food (음식)</div>
+                        <ul class="text-sm space-y-1 text-gray-600">
+                            <li>fish cake (어묵)</li>
+                            <li>milmyeon (밀면)</li>
+                            <li>pork soup (돼지국밥)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+                        <div class="font-bold text-indigo-800 mb-2">🌉 Symbol (상징)</div>
+                        <ul class="text-sm space-y-1 text-gray-600">
+                            <li>sea (바다)</li>
+                            <li>bridge (다리)</li>
+                            <li>seagull (갈매기)</li>
+                            <li>fireworks (불꽃놀이)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
+                        <div class="font-bold text-yellow-800 mb-2">🎨 Feeling (느낌)</div>
+                        <ul class="text-sm space-y-1 text-gray-600">
+                            <li>fun (재미있는), bright (밝은)</li>
+                            <li>friendly (친근한), cool (멋진)</li>
+                            <li>cute (귀여운)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 2 -->
+            <section class="glass-panel p-6 md:p-8">
+                <h2 class="section-title">Activity 2. AI 프롬프트(명령어) 예시</h2>
+                <p class="mb-4 text-gray-600">아래의 영어 문장을 복사해서 AI 이미지 생성기(Canva 등)에 붙여넣어 보세요!</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="jua-font text-lg text-blue-700 mb-2">🌊 해운대 & 갈매기 버전</h3>
+                        <div class="prompt-box">
+                            Make a cute mascot inspired by Haeundae Beach.<br>
+                            It has the sea, waves, and a seagull.<br>
+                            Make it simple and colorful.
+                            <button class="copy-btn" onclick="copyText(this)">복사</button>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="jua-font text-lg text-orange-700 mb-2">🍢 부산 어묵 버전</h3>
+                        <div class="prompt-box" style="border-left-color: #f97316;">
+                            Make a cute mascot inspired by Busan fish cake.<br>
+                            Make it funny and easy to draw.<br>
+                            Use simple lines.
+                            <button class="copy-btn" onclick="copyText(this)">복사</button>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="jua-font text-lg text-yellow-700 mb-2">🏘️ 감천문화마을 버전</h3>
+                        <div class="prompt-box" style="border-left-color: #eab308;">
+                            Make a cute mascot inspired by Gamcheon Culture Village.<br>
+                            Use colorful houses.<br>
+                            Make it bright and friendly.
+                            <button class="copy-btn" onclick="copyText(this)">복사</button>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="jua-font text-lg text-purple-700 mb-2">🔑 슈링클스 키링용 (필수 추가)</h3>
+                        <div class="prompt-box" style="border-left-color: #a855f7; background-color: #faf5ff;">
+                            Make a simple mascot design for a keychain.<br>
+                            Use thick lines and simple shapes.
+                            <button class="copy-btn" onclick="copyText(this)">복사</button>
+                        </div>
+                        <p class="text-xs text-purple-600 mt-1">* 위 프롬프트를 추가하면 그리기 쉬운 이미지가 나옵니다!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity 3 -->
+            <section class="glass-panel p-6 md:p-8 bg-blue-50 border-blue-200">
+                <h2 class="section-title !bg-blue-600 !text-white !border-blue-700">Activity 3. My Busan Mascot (영어 소개서)</h2>
+                <p class="mb-6 text-gray-700 font-medium">내가 만든 AI 마스코트를 영어로 소개해 봅시다. 빈칸을 클릭하여 채워주세요!</p>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-lg leading-loose">
+                    <p class="mb-3">Hello! 👋</p>
+                    <p class="mb-3">My mascot's name is <input type="text" id="mName" class="fill-blank" placeholder="이름">.</p>
+                    <p class="mb-3">It is inspired by <input type="text" id="mInspiration" class="fill-blank !w-[200px]" placeholder="해운대, 어묵 등">.</p>
+                    <p class="mb-3">It is <input type="text" id="mAdj1" class="fill-blank" placeholder="cute"> and <input type="text" id="mAdj2" class="fill-blank" placeholder="friendly">.</p>
+                    <p class="mb-3">Its colors are <input type="text" id="mColor1" class="fill-blank" placeholder="blue"> and <input type="text" id="mColor2" class="fill-blank" placeholder="white">.</p>
+                    <p class="mb-3">It shows <input type="text" id="mShows" class="fill-blank !w-[250px]" placeholder="Busan's sea, fun city 등">.</p>
+                    <p class="mb-3">I like my mascot because it is <input type="text" id="mReason" class="fill-blank" placeholder="pretty">.</p>
+                    <p>Thank you!</p>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <button id="submitBtn" onclick="submitWorksheet()" class="bg-blue-600 hover:bg-blue-700 text-white jua-font text-2xl py-4 px-12 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95 flex items-center justify-center mx-auto">
+                        🚀 우리 반 갤러리에 제출하기
+                    </button>
+                    <p id="submitMsg" class="mt-3 text-sm font-bold text-green-600 hidden">✅ 성공적으로 제출되었습니다!</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- 갤러리 탭 콘텐츠 -->
+        <div id="gallery-content" class="hidden space-y-6">
+            <div class="text-center mb-6">
+                <button onclick="loadGallery()" class="bg-white border-2 border-blue-200 text-blue-600 hover:bg-blue-50 py-2 px-6 rounded-full text-sm font-bold flex items-center justify-center mx-auto transition-colors">
+                    🔄 최신 데이터 불러오기
+                </button>
             </div>
-          </section>
-        `;
-      }).join("");
-    }
+            
+            <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="col-span-full text-center py-12 text-gray-500 jua-font text-xl" id="gallery-loading">
+                    데이터를 불러오는 중입니다... ⏳
+                </div>
+            </div>
+        </div>
 
-    function cardHtml(post) {
-      const image = post.imageUrl || "";
+    </div>
 
-      return `
-        <article class="card">
-          <div>
-            <div class="name">${escapeHtml(post.title)}</div>
-            <div class="time">${escapeHtml(post.studentName)} · ${escapeHtml(post.createdAt)}</div>
-          </div>
+    <script>
+        // 선생님께서 생성하신 구글 앱스 스크립트 웹 앱 URL이 적용되었습니다!
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGdwaGG8WOWTkS8VftrCm7E8hPK8LNt8eyc3tYutitiX8D2Cuj9KpcZfViU9ELy0RK/exec"; 
+        
+        function switchTab(tabName) {
+            const worksheetTab = document.getElementById('tab-worksheet');
+            const galleryTab = document.getElementById('tab-gallery');
+            const worksheetContent = document.getElementById('worksheet-content');
+            const galleryContent = document.getElementById('gallery-content');
 
-          <p>${escapeHtml(post.content)}</p>
+            if (tabName === 'worksheet') {
+                worksheetTab.classList.replace('inactive', 'active');
+                galleryTab.classList.replace('active', 'inactive');
+                worksheetContent.classList.remove('hidden');
+                galleryContent.classList.add('hidden');
+            } else {
+                galleryTab.classList.replace('inactive', 'active');
+                worksheetTab.classList.replace('active', 'inactive');
+                galleryContent.classList.remove('hidden');
+                worksheetContent.classList.add('hidden');
+                loadGallery();
+            }
+        }
 
-          ${
-            image
-              ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(post.title)} 이미지" loading="lazy">`
-              : ""
-          }
+        function copyText(btnElement) {
+            const textToCopy = btnElement.parentElement.innerText.replace('복사', '').trim();
+            
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                btnElement.innerText = "복사 완료!";
+                btnElement.style.backgroundColor = "#86efac";
+                setTimeout(() => {
+                    btnElement.innerText = "복사";
+                    btnElement.style.backgroundColor = "#e2e8f0";
+                }, 2000);
+            } catch (err) {
+                alert("복사에 실패했습니다. 직접 드래그해서 복사해주세요.");
+            }
+            document.body.removeChild(textArea);
+        }
 
-          <div class="card-actions">
-            <button class="like" onclick="likePost('${post.id}')">👍 ${post.likes || 0}</button>
-            <button class="delete" onclick="deletePost('${post.id}')">교사용 삭제</button>
-          </div>
-        </article>
-      `;
-    }
+        async function submitWorksheet() {
+            if (SCRIPT_URL.includes("여기에_구글_앱스_스크립트")) {
+                alert("⚠️ 선생님 설정 필요: HTML 파일 내부의 SCRIPT_URL에 구글 앱스 스크립트 주소를 넣어주세요!");
+                return;
+            }
 
-    form.addEventListener("submit", async function(event) {
-      event.preventDefault();
+            const studentName = document.getElementById('studentName').value.trim();
+            const mascotName = document.getElementById('mName').value.trim();
+            
+            if(!studentName) {
+                alert("학년 반 번호 & 이름을 입력해주세요!");
+                document.getElementById('studentName').focus();
+                return;
+            }
+            if(!mascotName) {
+                alert("마스코트 이름을 입력해주세요!");
+                document.getElementById('mName').focus();
+                return;
+            }
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = "올리는 중...";
+            const data = {
+                studentName: studentName,
+                mascotName: mascotName,
+                inspiredBy: document.getElementById('mInspiration').value,
+                adj1: document.getElementById('mAdj1').value,
+                adj2: document.getElementById('mAdj2').value,
+                color1: document.getElementById('mColor1').value,
+                color2: document.getElementById('mColor2').value,
+                shows: document.getElementById('mShows').value,
+                reason: document.getElementById('mReason').value
+            };
 
-      const post = {
-        stage: document.getElementById("stage").value,
-        studentName: document.getElementById("studentName").value.trim(),
-        title: document.getElementById("title").value.trim(),
-        content: document.getElementById("content").value.trim(),
-        imageUrl: document.getElementById("imageUrl").value.trim()
-      };
+            const btn = document.getElementById('submitBtn');
+            const msg = document.getElementById('submitMsg');
+            
+            btn.innerHTML = '<div class="spinner"></div> 제출 중...';
+            btn.disabled = true;
+            btn.classList.add('opacity-75');
 
-      try {
-        const data = await callApi("addPost", post);
-        posts = data.posts || [];
-        render();
-        setStatus(`총 ${posts.length}개의 게시물이 있습니다.`);
-        closeModal();
-      } catch (error) {
-        alert("오류: " + error.message);
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "올리기";
-      }
-    });
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    }
+                });
 
-    async function likePost(id) {
-      try {
-        const data = await callApi("likePost", { id: id });
-        posts = data.posts || [];
-        render();
-      } catch (error) {
-        alert("오류: " + error.message);
-      }
-    }
+                btn.innerHTML = '🚀 제출 완료!';
+                btn.classList.replace('bg-blue-600', 'bg-green-500');
+                msg.classList.remove('hidden');
 
-    async function deletePost(id) {
-      const code = prompt("선생님 삭제 비밀번호를 입력하세요.");
+                setTimeout(() => {
+                    switchTab('gallery');
+                    btn.innerHTML = '🚀 우리 반 갤러리에 제출하기';
+                    btn.classList.replace('bg-green-500', 'bg-blue-600');
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-75');
+                    msg.classList.add('hidden');
+                }, 1500);
 
-      if (!code) {
-        return;
-      }
+            } catch (error) {
+                console.error('Error!', error);
+                alert("네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+                btn.innerHTML = '🚀 다시 제출하기';
+                btn.disabled = false;
+                btn.classList.remove('opacity-75');
+            }
+        }
 
-      try {
-        const data = await callApi("deletePost", {
-          id: id,
-          deleteCode: code
-        });
+        async function loadGallery() {
+            const grid = document.getElementById('gallery-grid');
+            const loading = document.getElementById('gallery-loading');
+            
+            if (SCRIPT_URL.includes("여기에_구글_앱스_스크립트")) {
+                loading.innerHTML = "구글 시트 연동 설정이 필요합니다.<br>(HTML 소스코드 내 SCRIPT_URL을 변경해주세요)";
+                return;
+            }
 
-        posts = data.posts || [];
-        render();
-        setStatus(`총 ${posts.length}개의 게시물이 있습니다.`);
-      } catch (error) {
-        alert("오류: " + error.message);
-      }
-    }
+            loading.style.display = 'block';
+            grid.innerHTML = '';
+            grid.appendChild(loading);
+            loading.innerHTML = '<div class="spinner border-blue-500 border-top-transparent"></div> 데이터를 불러오는 중...';
 
-    searchInput.addEventListener("input", render);
+            try {
+                const response = await fetch(SCRIPT_URL);
+                const items = await response.json();
 
-    loadPosts();
+                loading.style.display = 'none';
+                
+                if(items.length === 0) {
+                    grid.innerHTML = '<div class="col-span-full text-center py-12 text-gray-500 jua-font text-xl">아직 제출된 마스코트가 없어요. 첫 번째로 제출해 보세요! 🏃‍♂️💨</div>';
+                    return;
+                }
 
-    setInterval(loadPosts, 20000);
-  </script>
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-6 rounded-2xl shadow-md border-t-4 border-blue-400 hover:shadow-lg transition-shadow relative overflow-hidden";
+                    
+                    const icon = document.createElement('div');
+                    icon.className = "absolute -bottom-4 -right-4 text-7xl opacity-5";
+                    icon.innerText = "🌊";
+                    
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="jua-font text-2xl text-blue-800">${item.mascotName || '(이름 없음)'}</h3>
+                            <span class="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded-full">${item.studentName}</span>
+                        </div>
+                        <div class="text-gray-700 text-sm space-y-2 relative z-10">
+                            <p><strong>💡 Inspired by:</strong> ${item.inspiredBy}</p>
+                            <p><strong>✨ Features:</strong> ${item.adjectives}</p>
+                            <p><strong>🎨 Colors:</strong> ${item.colors}</p>
+                            <p><strong>🏙️ Shows:</strong> ${item.shows}</p>
+                            <p class="mt-3 text-blue-600 italic">"I like it because it is ${item.reason}."</p>
+                        </div>
+                    `;
+                    card.appendChild(icon);
+                    grid.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error loading gallery:', error);
+                loading.innerHTML = "데이터를 불러오는 데 실패했습니다.<br>잠시 후 다시 시도해주세요.";
+            }
+        }
+    </script>
 </body>
 </html>
