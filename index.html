@@ -19,6 +19,7 @@
       --pink-soft: #fce7f3;
       --amber-soft: #fff4d6;
       --purple-soft: #f1e9ff;
+      --slate: #334155;
       --danger: #dc2626;
       --shadow: 0 16px 38px rgba(31, 41, 55, 0.11);
       --radius: 8px;
@@ -33,14 +34,15 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(circle at 12% 0%, rgba(37, 99, 235, 0.17), transparent 26rem),
-        radial-gradient(circle at 88% 8%, rgba(219, 39, 119, 0.13), transparent 24rem),
+        radial-gradient(circle at 12% 0%, rgba(37, 99, 235, 0.16), transparent 26rem),
+        radial-gradient(circle at 88% 8%, rgba(219, 39, 119, 0.12), transparent 24rem),
         linear-gradient(180deg, #f7fbff 0%, #f4f7fb 100%);
     }
 
     button,
     input,
-    textarea {
+    textarea,
+    select {
       font: inherit;
     }
 
@@ -68,13 +70,13 @@
     }
 
     .page {
-      width: min(980px, calc(100% - 28px));
+      width: min(1040px, calc(100% - 28px));
       margin: 0 auto;
       padding: 24px 0 40px;
     }
 
     .shell {
-      background: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.9);
       border: 1px solid rgba(217, 226, 239, 0.92);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -96,7 +98,7 @@
 
     .header p {
       margin: 8px auto 0;
-      max-width: 720px;
+      max-width: 760px;
       color: var(--muted);
       line-height: 1.65;
       font-size: 1.05rem;
@@ -235,34 +237,62 @@
 
     .activity-body {
       padding: 18px;
-      background: rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.74);
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
+    .note {
+      margin: 0 0 14px;
+      color: #475569;
+      line-height: 1.55;
+    }
+
+    .word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .word-bank span {
+      border: 1px solid var(--line);
       background: #ffffff;
-      border: 1px solid var(--line);
-      overflow: hidden;
-      border-radius: var(--radius);
+      border-radius: 999px;
+      padding: 6px 10px;
+      color: #334155;
+      font-size: 0.9rem;
     }
 
-    th,
-    td {
-      border: 1px solid var(--line);
-      padding: 12px;
-      vertical-align: middle;
-      text-align: left;
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
     }
 
-    th {
-      background: #e0f2fe;
-      color: #075985;
-      text-align: center;
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
     }
 
-    .input-line,
-    .field {
+    .form-row {
+      display: grid;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    label {
+      font-weight: 900;
+      color: #334155;
+    }
+
+    .help {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .field,
+    select {
       width: 100%;
       border: 1px solid #cbd5e1;
       border-radius: var(--radius);
@@ -274,55 +304,28 @@
 
     .inline-field {
       display: inline-block;
-      width: min(210px, 100%);
+      width: min(220px, 100%);
       margin: 3px 5px;
       border: 0;
       border-bottom: 2px dashed #60a5fa;
-      background: rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.78);
       padding: 5px 8px;
       text-align: center;
       color: #1d4ed8;
       outline: none;
     }
 
-    .input-line:focus,
     .field:focus,
+    select:focus,
     .inline-field:focus {
       border-color: var(--blue);
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-    }
-
-    .two-col {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .three-col {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .form-row {
-      display: grid;
-      gap: 7px;
-    }
-
-    label {
-      font-weight: 900;
-      color: #334155;
     }
 
     textarea {
       min-height: 118px;
       resize: vertical;
       line-height: 1.55;
-    }
-
-    .prompt-builder {
-      display: grid;
-      gap: 12px;
     }
 
     .prompt-sentence {
@@ -332,6 +335,7 @@
       padding: 15px;
       color: #4c1d95;
       line-height: 1.9;
+      margin-bottom: 12px;
     }
 
     .prompt-tools {
@@ -346,8 +350,20 @@
       border: 1px solid #99f6e4;
       border-radius: var(--radius);
       padding: 18px;
-      font-size: 1.05rem;
-      line-height: 2.1;
+      font-size: 1.02rem;
+      line-height: 2.05;
+    }
+
+    .preview-writing {
+      margin-top: 14px;
+      background: #f8fafc;
+      border: 1px solid #dbe4ef;
+      border-radius: var(--radius);
+      padding: 14px;
+      color: #334155;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .upload-grid {
@@ -463,6 +479,11 @@
       word-break: break-word;
     }
 
+    .gallery-title {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
     .image-pair {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -500,6 +521,7 @@
       padding: 10px;
     }
 
+    .gallery-detail,
     .prompt-card {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -509,6 +531,9 @@
       line-height: 1.55;
       white-space: pre-wrap;
       word-break: break-word;
+    }
+
+    .prompt-card {
       max-height: 145px;
       overflow: auto;
     }
@@ -522,6 +547,7 @@
       background: #ffffff;
       border: 1px solid var(--line);
       border-radius: var(--radius);
+      line-height: 1.6;
     }
 
     .error-state {
@@ -534,9 +560,9 @@
       display: none !important;
     }
 
-    @media (max-width: 760px) {
+    @media (max-width: 780px) {
       .page {
-        width: min(100% - 18px, 980px);
+        width: min(100% - 18px, 1040px);
         padding-top: 10px;
       }
 
@@ -547,8 +573,8 @@
       }
 
       .student-bar,
-      .two-col,
-      .three-col,
+      .grid-2,
+      .grid-3,
       .upload-grid,
       .gallery-grid,
       .image-pair,
@@ -567,11 +593,6 @@
         width: 100%;
       }
 
-      th,
-      td {
-        padding: 10px 8px;
-      }
-
       .submit-area button {
         width: 100%;
         min-width: 0;
@@ -585,7 +606,7 @@
     <section class="shell">
       <header class="header">
         <h1>내 손안의 부산</h1>
-        <p>AI 마스코트를 만들고, 영어 소개문과 슈링클스 키링 작품을 갤러리에 제출합니다.</p>
+        <p>부산의 장소, 음식, 상징을 바탕으로 AI 마스코트를 만들고 영어 소개문과 슈링클스 키링 작품을 갤러리에 제출합니다.</p>
 
         <nav class="tabs" aria-label="화면 선택">
           <button type="button" id="tabWorksheet" class="tab-btn active" onclick="switchTab('worksheet')">학습지 작성</button>
@@ -605,50 +626,73 @@
           <div class="activity-head">
             <div>
               <h2>Activity 1. What represents Busan?</h2>
-              <p>부산을 대표하는 장소, 음식, 상징을 골라 적어 봅니다.</p>
+              <p>마스코트에 넣고 싶은 부산의 소재를 고르고, 왜 골랐는지 설명합니다.</p>
             </div>
             <span class="badge">조사</span>
           </div>
           <div class="activity-body">
-            <table>
-              <thead>
-                <tr>
-                  <th>종류</th>
-                  <th>예시</th>
-                  <th>내가 고른 것</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>장소</strong></td>
-                  <td>Haeundae Beach, Gwangalli, Gamcheon Culture Village</td>
-                  <td><input type="text" class="input-line" placeholder="예: Haeundae Beach"></td>
-                </tr>
-                <tr>
-                  <td><strong>음식</strong></td>
-                  <td>fish cake, milmyeon, ssiat hotteok</td>
-                  <td><input type="text" class="input-line" placeholder="예: fish cake"></td>
-                </tr>
-                <tr>
-                  <td><strong>상징</strong></td>
-                  <td>sea, seagull, fireworks, bridge</td>
-                  <td><input type="text" class="input-line" placeholder="예: seagull"></td>
-                </tr>
-              </tbody>
-            </table>
+            <p class="note">단어를 그대로 써도 되고, 한국어로 먼저 생각한 뒤 쉬운 영어로 바꾸어도 됩니다.</p>
+            <div class="word-bank" aria-label="단어 예시">
+              <span>Haeundae Beach</span>
+              <span>Gwangalli Bridge</span>
+              <span>fish cake</span>
+              <span>milmyeon</span>
+              <span>sea</span>
+              <span>seagull</span>
+              <span>fireworks</span>
+              <span>friendly</span>
+              <span>bright</span>
+              <span>peaceful</span>
+            </div>
+
+            <div class="grid-3">
+              <div class="form-row">
+                <label for="busanPlace">부산 장소</label>
+                <input id="busanPlace" class="field" placeholder="예: Haeundae Beach">
+                <span class="help">마스코트 배경이나 모양에 넣을 장소</span>
+              </div>
+              <div class="form-row">
+                <label for="busanFood">부산 음식</label>
+                <input id="busanFood" class="field" placeholder="예: fish cake">
+                <span class="help">캐릭터 소품이나 무늬로 바꿀 수 있는 음식</span>
+              </div>
+              <div class="form-row">
+                <label for="busanSymbol">부산 상징</label>
+                <input id="busanSymbol" class="field" placeholder="예: seagull, sea, bridge">
+                <span class="help">부산이 떠오르게 하는 자연, 문화, 색깔</span>
+              </div>
+              <div class="form-row">
+                <label for="busanCategory">내가 사용할 중심 소재</label>
+                <select id="busanCategory">
+                  <option value="place">장소</option>
+                  <option value="food">음식</option>
+                  <option value="symbol">상징</option>
+                  <option value="culture">문화</option>
+                  <option value="mixed">여러 소재 섞기</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label for="busanMood">부산의 느낌</label>
+                <input id="busanMood" class="field" placeholder="예: lively, fresh, peaceful">
+              </div>
+              <div class="form-row">
+                <label for="busanReason">선택한 이유</label>
+                <input id="busanReason" class="field" placeholder="예: It is famous and beautiful.">
+              </div>
+            </div>
           </div>
         </section>
 
         <section class="activity amber">
           <div class="activity-head">
             <div>
-              <h2>Activity 2. 마스코트 계획하기</h2>
-              <p>마스코트 이름, 영감, 색깔을 먼저 정해 봅니다.</p>
+              <h2>Activity 2. 마스코트 디자인 계획하기</h2>
+              <p>이름, 성격, 특징, 색의 의미를 정하면 AI 프롬프트와 영어 소개문이 더 풍부해집니다.</p>
             </div>
             <span class="badge">계획</span>
           </div>
           <div class="activity-body">
-            <div class="three-col">
+            <div class="grid-3">
               <div class="form-row">
                 <label for="planName">Mascot name</label>
                 <input type="text" id="planName" class="field" placeholder="예: Bada">
@@ -658,8 +702,20 @@
                 <input type="text" id="planInspiration" class="field" placeholder="예: sea and seagull">
               </div>
               <div class="form-row">
-                <label for="planColors">Colors</label>
+                <label for="planPersonality">Personality</label>
+                <input type="text" id="planPersonality" class="field" placeholder="예: cheerful and brave">
+              </div>
+              <div class="form-row">
+                <label for="planColors">Main colors</label>
                 <input type="text" id="planColors" class="field" placeholder="예: blue and white">
+              </div>
+              <div class="form-row">
+                <label for="planFeature">Special feature</label>
+                <input type="text" id="planFeature" class="field" placeholder="예: wave-shaped wings">
+              </div>
+              <div class="form-row">
+                <label for="planAudience">Who will like it?</label>
+                <input type="text" id="planAudience" class="field" placeholder="예: visitors and students">
               </div>
             </div>
           </div>
@@ -669,19 +725,24 @@
           <div class="activity-head">
             <div>
               <h2>Activity 3. AI 프롬프트 만들기</h2>
-              <p>아래 빈칸을 채우면 AI 이미지 생성용 영어 프롬프트가 자동으로 만들어집니다.</p>
+              <p>스타일, 특징, 배경까지 넣어 중학교 2학년 수준의 조금 더 자세한 프롬프트를 만듭니다.</p>
             </div>
             <span class="badge">AI</span>
           </div>
-          <div class="activity-body prompt-builder">
+          <div class="activity-body">
             <div class="prompt-sentence">
               Make a cute mascot for Busan. It is inspired by
-              <input type="text" id="pInspire" class="inline-field" placeholder="place or symbol" oninput="updatePrompt()">.
+              <input type="text" id="pInspire" class="inline-field" placeholder="place, food, or symbol" oninput="updatePrompt()">.
               Use
               <input type="text" id="pColor" class="inline-field" placeholder="colors" oninput="updatePrompt()">
               colors. Make it
               <input type="text" id="pMood" class="inline-field" placeholder="mood" oninput="updatePrompt()">.
-              Make it simple and easy to draw.
+              Add
+              <input type="text" id="pFeature" class="inline-field" placeholder="special feature" oninput="updatePrompt()">.
+              Make it a
+              <input type="text" id="pStyle" class="inline-field" placeholder="sticker or keyring style" oninput="updatePrompt()">
+              with
+              <input type="text" id="pBackground" class="inline-field" placeholder="simple background" oninput="updatePrompt()">.
             </div>
             <div class="prompt-tools">
               <textarea id="myPrompt" class="field" placeholder="여기에 완성된 프롬프트가 나타납니다. 직접 수정해도 됩니다."></textarea>
@@ -694,23 +755,29 @@
           <div class="activity-head">
             <div>
               <h2>Activity 4. My Busan Mascot 영어 소개문</h2>
-              <p>간단한 영어 문장으로 내가 만든 마스코트를 소개합니다.</p>
+              <p>색의 의미, 디자인 특징, 부산을 소개하는 방법까지 넣어 한 문단으로 발표할 수 있게 씁니다.</p>
             </div>
             <span class="badge">영어</span>
           </div>
           <div class="activity-body">
             <div class="intro-box">
-              Hello.<br>
-              My mascot's name is <input type="text" id="mName" class="inline-field" placeholder="name">.<br>
-              It is inspired by <input type="text" id="mInspiration" class="inline-field" placeholder="place, food, or symbol">.<br>
-              It is <input type="text" id="mAdj1" class="inline-field" placeholder="adjective"> and
-              <input type="text" id="mAdj2" class="inline-field" placeholder="adjective">.<br>
-              Its colors are <input type="text" id="mColor1" class="inline-field" placeholder="color"> and
-              <input type="text" id="mColor2" class="inline-field" placeholder="color">.<br>
-              It shows <input type="text" id="mShows" class="inline-field" placeholder="what it shows">.<br>
-              I like my mascot because it is <input type="text" id="mReason" class="inline-field" placeholder="reason">.<br>
+              Hello, everyone.<br>
+              My mascot's name is <input type="text" id="mName" class="inline-field writing-field" placeholder="name">.<br>
+              It is inspired by <input type="text" id="mInspiration" class="inline-field writing-field" placeholder="place, food, or symbol"> in Busan.<br>
+              It looks like <input type="text" id="mAppearance" class="inline-field writing-field" placeholder="animal, object, or character">.<br>
+              It is <input type="text" id="mAdj1" class="inline-field writing-field" placeholder="adjective"> and
+              <input type="text" id="mAdj2" class="inline-field writing-field" placeholder="adjective">.<br>
+              Its main colors are <input type="text" id="mColor1" class="inline-field writing-field" placeholder="color"> and
+              <input type="text" id="mColor2" class="inline-field writing-field" placeholder="color"> because
+              <input type="text" id="mColorReason" class="inline-field writing-field" placeholder="reason for colors">.<br>
+              It has <input type="text" id="mFeature" class="inline-field writing-field" placeholder="special feature">.<br>
+              It represents <input type="text" id="mShows" class="inline-field writing-field" placeholder="Busan value or image">.<br>
+              I want people to feel <input type="text" id="mFeeling" class="inline-field writing-field" placeholder="feeling"> when they see it.<br>
+              I like my mascot because <input type="text" id="mReason" class="inline-field writing-field" placeholder="your reason">.<br>
+              This mascot can introduce Busan by <input type="text" id="mBusanConnection" class="inline-field writing-field" placeholder="how it introduces Busan">.<br>
               Thank you!
             </div>
+            <div id="writingPreview" class="preview-writing" aria-live="polite"></div>
           </div>
         </section>
 
@@ -718,7 +785,7 @@
           <div class="activity-head">
             <div>
               <h2>Activity 5. 마스코트와 키링 갤러리 제출</h2>
-              <p>AI가 만든 마스코트 이미지와 내가 만든 키링 사진을 함께 올립니다.</p>
+              <p>AI 이미지와 완성 키링 사진을 올리고, 작품에서 마음에 드는 점과 다음에 고치고 싶은 점을 적습니다.</p>
             </div>
             <span class="badge">제출</span>
           </div>
@@ -733,6 +800,16 @@
                 <strong>2. 완성 키링 사진</strong>
                 <input type="file" id="uploadKeyring" accept="image/*" onchange="previewImage(event, 'previewKeyring')">
                 <img id="previewKeyring" class="preview" alt="키링 사진 미리보기">
+              </div>
+            </div>
+            <div class="grid-2" style="margin-top: 14px;">
+              <div class="form-row">
+                <label for="favoritePart">작품에서 가장 마음에 드는 부분</label>
+                <input id="favoritePart" class="field" placeholder="예: The wave-shaped wings look cute.">
+              </div>
+              <div class="form-row">
+                <label for="improveNext">다음에 고치고 싶은 부분</label>
+                <input id="improveNext" class="field" placeholder="예: I want to make the colors clearer.">
               </div>
             </div>
           </div>
@@ -757,7 +834,7 @@
   </main>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxLy9u7uuxnHGpAEGdMnHRwF679N_DuyR44A8TyG8WTBBDEUBZ2LHXC_WjGOIl6XCEq/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJBUfS_A5k15HNHQygJVG8M6P_x423Vxx_fpzdYTS11Yg9HFT0xKX00DwoxdfSsf2D/exec";
     const MAX_IMAGE_EDGE = 1200;
     const IMAGE_QUALITY = 0.82;
 
@@ -785,16 +862,39 @@
     }
 
     function updatePrompt() {
-      const inspiration = valueOf("pInspire") || "[place or symbol]";
+      const inspiration = valueOf("pInspire") || "[place, food, or symbol]";
       const colors = valueOf("pColor") || "[colors]";
       const mood = valueOf("pMood") || "[mood]";
+      const feature = valueOf("pFeature") || "[special feature]";
+      const style = valueOf("pStyle") || "simple sticker style";
+      const background = valueOf("pBackground") || "a simple white background";
 
       document.getElementById("myPrompt").value =
         `Make a cute mascot for Busan.\n` +
         `It is inspired by ${inspiration}.\n` +
         `Use ${colors} colors.\n` +
         `Make it ${mood}.\n` +
-        `Make it simple and easy to draw.`;
+        `Add ${feature}.\n` +
+        `Make it a ${style} with ${background}.\n` +
+        `It should be simple, friendly, and easy to draw as a keyring design.`;
+    }
+
+    function updateWritingPreview() {
+      const text =
+        `Hello, everyone.\n` +
+        `My mascot's name is ${valueOf("mName") || "__________"}.\n` +
+        `It is inspired by ${valueOf("mInspiration") || "__________"} in Busan.\n` +
+        `It looks like ${valueOf("mAppearance") || "__________"}.\n` +
+        `It is ${valueOf("mAdj1") || "__________"} and ${valueOf("mAdj2") || "__________"}.\n` +
+        `Its main colors are ${valueOf("mColor1") || "__________"} and ${valueOf("mColor2") || "__________"} because ${valueOf("mColorReason") || "__________"}.\n` +
+        `It has ${valueOf("mFeature") || "__________"}.\n` +
+        `It represents ${valueOf("mShows") || "__________"}.\n` +
+        `I want people to feel ${valueOf("mFeeling") || "__________"} when they see it.\n` +
+        `I like my mascot because ${valueOf("mReason") || "__________"}.\n` +
+        `This mascot can introduce Busan by ${valueOf("mBusanConnection") || "__________"}.\n` +
+        `Thank you!`;
+
+      document.getElementById("writingPreview").textContent = text;
     }
 
     async function copyPrompt() {
@@ -919,49 +1019,42 @@
           studentName: studentName,
           mascotName: valueOf("mName") || valueOf("planName"),
           inspiredBy: valueOf("mInspiration") || valueOf("planInspiration"),
-          adj1: valueOf("mAdj1"),
+          busanCategory: valueOf("busanCategory"),
+          adj1: valueOf("mAdj1") || valueOf("planPersonality"),
           adj2: valueOf("mAdj2"),
           color1: valueOf("mColor1"),
           color2: valueOf("mColor2"),
+          appearance: valueOf("mAppearance"),
+          specialFeature: valueOf("mFeature") || valueOf("planFeature"),
           shows: valueOf("mShows"),
-          reason: valueOf("mReason"),
+          colorReason: valueOf("mColorReason"),
+          feeling: valueOf("mFeeling") || valueOf("busanMood"),
+          reason: valueOf("mReason") || valueOf("busanReason"),
+          busanConnection: valueOf("mBusanConnection"),
           myPrompt: valueOf("myPrompt"),
+          favoritePart: valueOf("favoritePart"),
+          improveNext: valueOf("improveNext"),
           imageBase64_ai: imageBase64Ai,
           imageBase64_keyring: imageBase64Keyring
         };
 
         submitBtn.innerHTML = '<span class="spinner"></span>갤러리에 제출 중...';
-        submitStatus.textContent = "Google Apps Script로 전송하고 있습니다.";
+        submitStatus.textContent = "제출 요청을 보내고 있습니다. 사진이 있으면 조금 더 걸릴 수 있습니다.";
 
-        const response = await fetch(SCRIPT_URL, {
+        await fetch(SCRIPT_URL, {
           method: "POST",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
+          mode: "no-cors",
           body: JSON.stringify(data)
         });
 
-        const text = await response.text();
-        let result = {};
-
-        try {
-          result = JSON.parse(text);
-        } catch (error) {
-          result = { result: text.includes("success") ? "success" : "error" };
-        }
-
-        if (!response.ok || result.result !== "success") {
-          throw new Error(result.message || "제출이 완료되지 않았습니다.");
-        }
-
-        submitBtn.textContent = "제출 완료";
-        submitStatus.textContent = "제출되었습니다. 갤러리로 이동합니다.";
+        submitBtn.textContent = "제출 요청 완료";
+        submitStatus.textContent = "제출 요청을 보냈습니다. 잠시 후 갤러리를 새로고침합니다.";
 
         setTimeout(function() {
           submitBtn.disabled = false;
           submitBtn.textContent = "갤러리에 제출하기";
           switchTab("gallery");
-        }, 900);
+        }, 1800);
       } catch (error) {
         submitBtn.disabled = false;
         submitBtn.textContent = "다시 제출하기";
@@ -970,33 +1063,82 @@
       }
     }
 
+    function getGalleryItemsJsonp() {
+      return new Promise(function(resolve, reject) {
+        const callbackName = "galleryCallback_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+        const script = document.createElement("script");
+        const timer = setTimeout(function() {
+          cleanup();
+          reject(new Error("갤러리 응답 시간이 초과되었습니다. Apps Script doGet 코드와 배포 상태를 확인해 주세요."));
+        }, 15000);
+
+        function cleanup() {
+          clearTimeout(timer);
+          delete window[callbackName];
+          script.remove();
+        }
+
+        window[callbackName] = function(data) {
+          cleanup();
+
+          if (Array.isArray(data)) {
+            resolve(data);
+            return;
+          }
+
+          if (data && data.result === "error") {
+            reject(new Error(data.message || "Apps Script 오류가 발생했습니다."));
+            return;
+          }
+
+          resolve(data && Array.isArray(data.items) ? data.items : []);
+        };
+
+        script.onerror = function() {
+          cleanup();
+          reject(new Error("갤러리 데이터를 불러오지 못했습니다."));
+        };
+
+        const query = new URLSearchParams({
+          callback: callbackName,
+          t: Date.now().toString()
+        });
+
+        script.src = SCRIPT_URL + "?" + query.toString();
+        document.body.appendChild(script);
+      });
+    }
+
     async function loadGallery() {
       galleryGrid.innerHTML = '<div class="empty-state">갤러리를 불러오는 중입니다...</div>';
 
       try {
-        const response = await fetch(SCRIPT_URL + "?t=" + Date.now());
-
-        if (!response.ok) {
-          throw new Error("갤러리 데이터를 불러오지 못했습니다.");
-        }
-
-        const items = await response.json();
+        const items = await getGalleryItemsJsonp();
 
         if (!Array.isArray(items) || items.length === 0) {
-          galleryGrid.innerHTML = '<div class="empty-state">아직 제출된 작품이 없습니다.</div>';
+          galleryGrid.innerHTML = '<div class="empty-state">아직 제출된 작품이 없습니다. 방금 제출했다면 5초 뒤 새로고침을 눌러 주세요.</div>';
           return;
         }
 
         galleryGrid.innerHTML = items.map(galleryCardHtml).join("");
       } catch (error) {
-        galleryGrid.innerHTML = `<div class="error-state">오류: ${escapeHtml(error.message)}</div>`;
+        galleryGrid.innerHTML =
+          `<div class="error-state">오류: ${escapeHtml(error.message)}<br>Apps Script의 doGet 함수가 JSONP callback을 반환하도록 업데이트되어야 합니다.</div>`;
       }
     }
 
     function galleryCardHtml(item) {
+      const detail = [
+        item.inspiredBy ? `Inspired by: ${item.inspiredBy}` : "",
+        item.specialFeature ? `Feature: ${item.specialFeature}` : "",
+        item.feeling ? `Feeling: ${item.feeling}` : "",
+        item.favoritePart ? `Favorite part: ${item.favoritePart}` : ""
+      ].filter(Boolean).join("\n");
+
       return `
         <article class="gallery-card">
           <div class="gallery-name">${escapeHtml(item.studentName || "익명")}</div>
+          <h3 class="gallery-title">${escapeHtml(item.mascotName || "이름 없는 마스코트")}</h3>
           <div class="image-pair">
             <div class="gallery-image-block">
               <p>AI 마스코트</p>
@@ -1007,6 +1149,7 @@
               ${imageHtml(item.imageUrl_keyring, "키링 사진")}
             </div>
           </div>
+          ${detail ? `<div class="gallery-detail">${escapeHtml(detail)}</div>` : ""}
           <div class="prompt-card"><strong>사용한 프롬프트</strong><br>${escapeHtml(item.myPrompt || "입력된 프롬프트가 없습니다.")}</div>
         </article>
       `;
@@ -1034,6 +1177,7 @@
 
     document.getElementById("planName").addEventListener("input", function(event) {
       if (!valueOf("mName")) document.getElementById("mName").value = event.target.value;
+      updateWritingPreview();
     });
 
     document.getElementById("planInspiration").addEventListener("input", function(event) {
@@ -1042,6 +1186,7 @@
         document.getElementById("pInspire").value = event.target.value;
         updatePrompt();
       }
+      updateWritingPreview();
     });
 
     document.getElementById("planColors").addEventListener("input", function(event) {
@@ -1051,7 +1196,28 @@
       }
     });
 
+    document.getElementById("planFeature").addEventListener("input", function(event) {
+      if (!valueOf("mFeature")) document.getElementById("mFeature").value = event.target.value;
+      if (!valueOf("pFeature")) {
+        document.getElementById("pFeature").value = event.target.value;
+        updatePrompt();
+      }
+      updateWritingPreview();
+    });
+
+    document.getElementById("planPersonality").addEventListener("input", function(event) {
+      const words = event.target.value.split(/\s+and\s+|,\s*/).filter(Boolean);
+      if (!valueOf("mAdj1") && words[0]) document.getElementById("mAdj1").value = words[0];
+      if (!valueOf("mAdj2") && words[1]) document.getElementById("mAdj2").value = words[1];
+      updateWritingPreview();
+    });
+
+    document.querySelectorAll(".writing-field").forEach(function(input) {
+      input.addEventListener("input", updateWritingPreview);
+    });
+
     updatePrompt();
+    updateWritingPreview();
   </script>
 </body>
 </html>
