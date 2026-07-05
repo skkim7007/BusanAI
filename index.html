@@ -156,8 +156,8 @@
     </div>
 
     <script>
-        // 🚨 새로 배포한 웹 앱 URL을 여기에 붙여넣어 주세요!
-        const SCRIPT_URL = "https://script.google.com/macros/s/새로운_URL_문자열을_넣으세요/exec";
+        // 선생님의 새로운 웹 앱 주소 업데이트 완료!
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbymp5pyxflcrmVlvVfYtFIp40RYnTjZjGIJwGQ3x3q4vtlfjann61ju-2Ie_ilFhhKG/exec";
 
         // 탭 전환
         function switchTab(tab) {
@@ -199,20 +199,22 @@
             alert('프롬프트가 복사되었습니다! AI 이미지 생성기에 붙여넣기(Ctrl+V) 하세요.');
         }
 
-        // 이미지 미리보기
+        // 이미지 미리보기 및 리사이즈 (데이터 용량 최적화)
         function previewImage(event, previewId) {
+            const file = event.target.files[0];
+            if(!file) return;
+            
             const reader = new FileReader();
-            reader.onload = function(){
+            reader.onload = function(e){
+                // 이미지 미리보기 적용
                 const output = document.getElementById(previewId);
-                output.src = reader.result;
+                output.src = e.target.result;
                 output.classList.remove('hidden');
             };
-            if(event.target.files[0]) {
-                reader.readAsDataURL(event.target.files[0]);
-            }
+            reader.readAsDataURL(file);
         }
 
-        // Base64 변환
+        // Base64 변환 함수
         function getBase64(file) {
            return new Promise((resolve, reject) => {
              const reader = new FileReader();
@@ -222,22 +224,25 @@
            });
         }
 
-        // 데이터 및 2장의 사진 제출
+        // 데이터 및 사진 제출
         async function submitData() {
             const name = document.getElementById('sName').value.trim();
-            if (!name) { alert("이름을 꼭 적어주세요!"); return; }
+            if (!name) { 
+                alert("이름을 꼭 적어주세요!"); 
+                document.getElementById('sName').focus();
+                return; 
+            }
 
             const fullName = `${document.getElementById('sGrade').value}학년 ${document.getElementById('sClass').value}반 ${document.getElementById('sNum').value}번 ${name}`.trim();
             
             let base64AI = "";
             let base64Keyring = "";
             
-            if (document.getElementById('uploadAI').files.length > 0) {
-                base64AI = await getBase64(document.getElementById('uploadAI').files[0]);
-            }
-            if (document.getElementById('uploadKeyring').files.length > 0) {
-                base64Keyring = await getBase64(document.getElementById('uploadKeyring').files[0]);
-            }
+            const fileAI = document.getElementById('uploadAI').files[0];
+            const fileKeyring = document.getElementById('uploadKeyring').files[0];
+
+            if (fileAI) base64AI = await getBase64(fileAI);
+            if (fileKeyring) base64Keyring = await getBase64(fileKeyring);
 
             const data = {
                 studentName: fullName,
@@ -264,12 +269,15 @@
                     body: JSON.stringify(data),
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' }
                 });
+                
                 const resultText = await res.text();
                 
                 if(resultText.includes("error")) {
-                    console.error(resultText);
-                    alert("구글 드라이브 저장 권한 등의 오류가 발생했습니다. 개발자 도구를 확인해주세요.");
-                    throw new Error("Apps Script Error");
+                    console.error("서버 에러:", resultText);
+                    alert("구글 드라이브 권한 오류가 발생했습니다. 구글 앱스 스크립트에서 직접 '실행' 버튼을 눌러 권한을 허용했는지 확인해주세요.");
+                    btn.innerHTML = '🚀 다시 제출하기';
+                    btn.disabled = false;
+                    return;
                 }
 
                 btn.innerHTML = '🚀 제출 성공!';
@@ -282,7 +290,8 @@
                     btn.disabled = false;
                 }, 1500);
             } catch (error) {
-                alert("네트워크 오류 또는 권한 오류가 발생했습니다.");
+                console.error("Fetch 에러:", error);
+                alert("네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
                 btn.innerHTML = '🚀 다시 제출하기';
                 btn.disabled = false;
             }
@@ -298,7 +307,8 @@
             loading.style.display = 'block';
 
             try {
-                const response = await fetch(SCRIPT_URL);
+                // GET 요청시 캐시 방지를 위해 타임스탬프 추가
+                const response = await fetch(SCRIPT_URL + "?t=" + new Date().getTime());
                 const items = await response.json();
                 loading.style.display = 'none';
 
@@ -336,6 +346,7 @@
                 });
             } catch (error) {
                 loading.innerHTML = "데이터를 불러오지 못했습니다. 앱스 스크립트 '새 배포' 주소를 확인해주세요.";
+                console.error(error);
             }
         }
     </script>
