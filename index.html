@@ -500,6 +500,10 @@
               <span>Thank you.</span>
             </div>
           </div>
+          
+          <div style="margin-top: 20px; text-align: right;">
+            <button type="button" class="secondary" id="copyPtBtn" onclick="copyPresentation()">📋 발표 스크립트 복사하기</button>
+          </div>
         </div>
       </section>
 
@@ -640,6 +644,34 @@
       try {
         document.execCommand('copy');
         btn.innerHTML = "✅ 복사 완료! AI에게 붙여넣기 하세요";
+        btn.style.background = "var(--mint)";
+        btn.style.color = "#1e293b";
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.style.background = ""; 
+          btn.style.color = "";
+        }, 3000);
+      } catch (err) {
+        btn.innerHTML = "❌ 복사 실패";
+        setTimeout(() => { btn.innerHTML = originalText; }, 3000);
+      }
+      document.body.removeChild(textArea);
+    }
+
+    function copyPresentation() {
+      const ptText = `Hello, everyone. This is my Busan mascot. My mascot's name is ${val('ptName') || '___'}. I got the idea from ${val('ptIdea') || '___'}. It looks like ${val('ptLook') || '___'}. It is ${val('ptMood') || '___'}. The colors are ${val('ptColors') || '___'}. It has ${val('ptFeature') || '___'}. I like my mascot because ${val('ptReason') || '___'}. Thank you.`;
+      
+      const textArea = document.createElement("textarea");
+      textArea.value = ptText;
+      document.body.appendChild(textArea);
+      textArea.select();
+      
+      const btn = document.getElementById("copyPtBtn");
+      const originalText = btn.innerHTML;
+      
+      try {
+        document.execCommand('copy');
+        btn.innerHTML = "✅ 복사 완료! 발표할 때 참고하세요";
         btn.style.background = "var(--mint)";
         btn.style.color = "#1e293b";
         setTimeout(() => {
