@@ -3,440 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>내 손안의 부산 🌊 마스코트 만들기</title>
+    <title>🌊 내 손안의 부산: 마스코트 & 키링 만들기 🌊</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f0f8ff;
-            background-image: radial-gradient(#bae6fd 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-        h1, h2, h3, .jua-font {
             font-family: 'Jua', sans-serif;
+            background-color: #f0f8ff; /* 파스텔 블루 배경 */
+            color: #333;
         }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            border: 2px solid #e0f2fe;
+        .worksheet-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         .section-title {
-            background-color: #e0f2fe;
+            background-color: #ffe4e1; /* 연한 핑크 */
             display: inline-block;
-            padding: 8px 20px;
+            padding: 5px 15px;
             border-radius: 20px;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-            color: #0369a1;
-            border: 2px dashed #7dd3fc;
+            margin-bottom: 15px;
+            font-size: 1.25rem;
+            color: #d2691e;
+        }
+        .input-line {
+            border-bottom: 2px dashed #a0aec0;
+            display: inline-block;
+            min-width: 100px;
+            height: 25px;
         }
         .fill-blank {
             border: none;
-            border-bottom: 2px dashed #60a5fa;
-            background: rgba(239, 246, 255, 0.5);
+            border-bottom: 2px dashed #4299e1;
+            background: transparent;
             font-family: 'Jua', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             text-align: center;
-            color: #1d4ed8;
+            color: #2b6cb0;
             outline: none;
-            transition: all 0.3s ease;
-            padding: 4px 8px;
-            border-radius: 8px;
-            margin: 0 4px;
-            width: 120px;
-        }
-        .fill-blank:focus {
-            border-bottom: 2px solid #f97316;
-            background-color: #fff7ed;
-            box-shadow: 0 0 0 3px rgba(253, 186, 116, 0.4);
-            transform: scale(1.05);
         }
         .prompt-box {
-            background-color: #f8fafc;
-            border-left: 4px solid #3b82f6;
+            background-color: #edf2f7;
+            border-left: 5px solid #4299e1;
             padding: 15px;
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 15px;
-            font-family: monospace;
-            font-size: 1.1rem;
-            position: relative;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
         }
-        .copy-btn {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            background-color: #e2e8f0;
-            border: none;
-            border-radius: 4px;
-            padding: 4px 8px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: background 0.2s;
-        }
-        .copy-btn:hover { background-color: #cbd5e1; }
-        
-        /* 탭 스타일 */
-        .tab-btn {
-            transition: all 0.3s ease;
-        }
-        .tab-btn.active {
-            background-color: #3b82f6;
-            color: white;
-            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
-        }
-        .tab-btn.inactive {
-            background-color: #e2e8f0;
-            color: #64748b;
-        }
-        .tab-btn.inactive:hover {
-            background-color: #cbd5e1;
-        }
-        
-        /* 스피너 애니메이션 */
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .spinner {
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s ease-in-out infinite;
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 8px;
+        /* 인쇄용 스타일 */
+        @media print {
+            body { background-color: #fff; }
+            .worksheet-container { box-shadow: none; padding: 0; }
         }
     </style>
 </head>
-<body class="p-4 md:p-8 text-gray-800">
+<body class="p-4 md:p-8">
 
-    <div class="max-w-5xl mx-auto">
-        <!-- 헤더 -->
-        <header class="text-center mb-10">
-            <h1 class="text-4xl md:text-5xl text-blue-600 mb-3 drop-shadow-sm">🌊 내 손안의 부산 🌊</h1>
-            <p class="text-xl jua-font text-blue-500">AI 마스코트 만들기와 영어 키링 제작</p>
-        </header>
-
-        <!-- 탭 네비게이션 -->
-        <div class="flex justify-center space-x-4 mb-8">
-            <button id="tab-worksheet" onclick="switchTab('worksheet')" class="tab-btn active px-6 py-3 rounded-full text-lg jua-font font-bold">
-                📝 활동지 작성
-            </button>
-            <button id="tab-gallery" onclick="switchTab('gallery')" class="tab-btn inactive px-6 py-3 rounded-full text-lg jua-font font-bold">
-                🖼️ 우리 반 갤러리
-            </button>
+    <div class="worksheet-container">
+        <!-- 헤더 부분 -->
+        <div class="text-center mb-10">
+            <h1 class="text-4xl text-blue-500 mb-2">🌊 내 손안의 부산 🌊</h1>
+            <h2 class="text-2xl text-gray-600 mb-6">AI 마스코트 만들기와 영어 키링 제작</h2>
+            <div class="flex justify-end gap-4 text-xl">
+                <span><span class="input-line w-12"></span> 학년</span>
+                <span><span class="input-line w-12"></span> 반</span>
+                <span><span class="input-line w-12"></span> 번</span>
+                <span>이름: <span class="input-line w-32"></span></span>
+            </div>
         </div>
 
-        <!-- 활동지 탭 콘텐츠 -->
-        <div id="worksheet-content" class="space-y-8">
-            
-            <!-- 학생 정보 -->
-            <div class="glass-panel p-6 md:p-8 text-center flex justify-center items-center flex-wrap gap-4">
-                <span class="text-xl jua-font text-gray-700">학년 반 번호 & 이름:</span>
-                <input type="text" id="studentName" class="fill-blank !width-[200px] text-center" placeholder="예: 2학년 3반 홍길동">
-            </div>
-
-            <!-- Activity 1 -->
-            <section class="glass-panel p-6 md:p-8">
-                <h2 class="section-title">Activity 1. What represents Busan?</h2>
-                <p class="mb-4 text-gray-600">부산을 나타내는 것을 자유롭게 살펴보고 기억해두세요!</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                        <div class="font-bold text-blue-800 mb-2">🏖️ Place (장소)</div>
-                        <ul class="text-sm space-y-1 text-gray-600">
-                            <li>Haeundae Beach (해운대 해변)</li>
-                            <li>Gwangalli (광안리)</li>
-                            <li>Gamcheon Culture Village (감천문화마을)</li>
-                        </ul>
-                    </div>
-                    <div class="bg-orange-50 p-4 rounded-xl border border-orange-100">
-                        <div class="font-bold text-orange-800 mb-2">🍢 Food (음식)</div>
-                        <ul class="text-sm space-y-1 text-gray-600">
-                            <li>fish cake (어묵)</li>
-                            <li>milmyeon (밀면)</li>
-                            <li>pork soup (돼지국밥)</li>
-                        </ul>
-                    </div>
-                    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
-                        <div class="font-bold text-indigo-800 mb-2">🌉 Symbol (상징)</div>
-                        <ul class="text-sm space-y-1 text-gray-600">
-                            <li>sea (바다)</li>
-                            <li>bridge (다리)</li>
-                            <li>seagull (갈매기)</li>
-                            <li>fireworks (불꽃놀이)</li>
-                        </ul>
-                    </div>
-                    <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
-                        <div class="font-bold text-yellow-800 mb-2">🎨 Feeling (느낌)</div>
-                        <ul class="text-sm space-y-1 text-gray-600">
-                            <li>fun (재미있는), bright (밝은)</li>
-                            <li>friendly (친근한), cool (멋진)</li>
-                            <li>cute (귀여운)</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Activity 2 -->
-            <section class="glass-panel p-6 md:p-8">
-                <h2 class="section-title">Activity 2. AI 프롬프트(명령어) 예시</h2>
-                <p class="mb-4 text-gray-600">아래의 영어 문장을 복사해서 AI 이미지 생성기(Canva 등)에 붙여넣어 보세요!</p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <h3 class="jua-font text-lg text-blue-700 mb-2">🌊 해운대 & 갈매기 버전</h3>
-                        <div class="prompt-box">
-                            Make a cute mascot inspired by Haeundae Beach.<br>
-                            It has the sea, waves, and a seagull.<br>
-                            Make it simple and colorful.
-                            <button class="copy-btn" onclick="copyText(this)">복사</button>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="jua-font text-lg text-orange-700 mb-2">🍢 부산 어묵 버전</h3>
-                        <div class="prompt-box" style="border-left-color: #f97316;">
-                            Make a cute mascot inspired by Busan fish cake.<br>
-                            Make it funny and easy to draw.<br>
-                            Use simple lines.
-                            <button class="copy-btn" onclick="copyText(this)">복사</button>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="jua-font text-lg text-yellow-700 mb-2">🏘️ 감천문화마을 버전</h3>
-                        <div class="prompt-box" style="border-left-color: #eab308;">
-                            Make a cute mascot inspired by Gamcheon Culture Village.<br>
-                            Use colorful houses.<br>
-                            Make it bright and friendly.
-                            <button class="copy-btn" onclick="copyText(this)">복사</button>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="jua-font text-lg text-purple-700 mb-2">🔑 슈링클스 키링용 (필수 추가)</h3>
-                        <div class="prompt-box" style="border-left-color: #a855f7; background-color: #faf5ff;">
-                            Make a simple mascot design for a keychain.<br>
-                            Use thick lines and simple shapes.
-                            <button class="copy-btn" onclick="copyText(this)">복사</button>
-                        </div>
-                        <p class="text-xs text-purple-600 mt-1">* 위 프롬프트를 추가하면 그리기 쉬운 이미지가 나옵니다!</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Activity 3 -->
-            <section class="glass-panel p-6 md:p-8 bg-blue-50 border-blue-200">
-                <h2 class="section-title !bg-blue-600 !text-white !border-blue-700">Activity 3. My Busan Mascot (영어 소개서)</h2>
-                <p class="mb-6 text-gray-700 font-medium">내가 만든 AI 마스코트를 영어로 소개해 봅시다. 빈칸을 클릭하여 채워주세요!</p>
-                
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-lg leading-loose">
-                    <p class="mb-3">Hello! 👋</p>
-                    <p class="mb-3">My mascot's name is <input type="text" id="mName" class="fill-blank" placeholder="이름">.</p>
-                    <p class="mb-3">It is inspired by <input type="text" id="mInspiration" class="fill-blank !w-[200px]" placeholder="해운대, 어묵 등">.</p>
-                    <p class="mb-3">It is <input type="text" id="mAdj1" class="fill-blank" placeholder="cute"> and <input type="text" id="mAdj2" class="fill-blank" placeholder="friendly">.</p>
-                    <p class="mb-3">Its colors are <input type="text" id="mColor1" class="fill-blank" placeholder="blue"> and <input type="text" id="mColor2" class="fill-blank" placeholder="white">.</p>
-                    <p class="mb-3">It shows <input type="text" id="mShows" class="fill-blank !w-[250px]" placeholder="Busan's sea, fun city 등">.</p>
-                    <p class="mb-3">I like my mascot because it is <input type="text" id="mReason" class="fill-blank" placeholder="pretty">.</p>
-                    <p>Thank you!</p>
-                </div>
-
-                <div class="mt-8 text-center">
-                    <button id="submitBtn" onclick="submitWorksheet()" class="bg-blue-600 hover:bg-blue-700 text-white jua-font text-2xl py-4 px-12 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95 flex items-center justify-center mx-auto">
-                        🚀 우리 반 갤러리에 제출하기
-                    </button>
-                    <p id="submitMsg" class="mt-3 text-sm font-bold text-green-600 hidden">✅ 성공적으로 제출되었습니다!</p>
-                </div>
-            </section>
+        <!-- Activity 1 -->
+        <div class="mb-10 bg-blue-50 p-6 rounded-2xl border-2 border-blue-200">
+            <h3 class="section-title text-blue-700 bg-blue-200">✨ Activity 1. What represents Busan?</h3>
+            <p class="mb-4 text-lg">부산을 나타내는 것을 골라 동그라미 치거나, 나만의 아이디어를 적어보세요!</p>
+            <table class="w-full text-center border-collapse">
+                <thead>
+                    <tr class="bg-blue-300 text-white">
+                        <th class="p-2 border border-blue-200 rounded-tl-lg">종류</th>
+                        <th class="p-2 border border-blue-200">예시 (Examples)</th>
+                        <th class="p-2 border border-blue-200 rounded-tr-lg">내가 고른 것 ✏️</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    <tr>
+                        <td class="p-3 border border-blue-200 font-bold text-blue-600">장소 (Place)</td>
+                        <td class="p-3 border border-blue-200">Haeundae Beach, Gwangalli, Gamcheon Culture Village</td>
+                        <td class="p-3 border border-blue-200"><input type="text" class="w-full fill-blank"></td>
+                    </tr>
+                    <tr>
+                        <td class="p-3 border border-blue-200 font-bold text-red-500">음식 (Food)</td>
+                        <td class="p-3 border border-blue-200">fish cake, milmyeon, pork soup</td>
+                        <td class="p-3 border border-blue-200"><input type="text" class="w-full fill-blank"></td>
+                    </tr>
+                    <tr>
+                        <td class="p-3 border border-blue-200 font-bold text-green-500">상징 (Symbol)</td>
+                        <td class="p-3 border border-blue-200">sea, bridge, seagull, fireworks</td>
+                        <td class="p-3 border border-blue-200"><input type="text" class="w-full fill-blank"></td>
+                    </tr>
+                    <tr>
+                        <td class="p-3 border border-blue-200 font-bold text-yellow-500">색깔 (Color)</td>
+                        <td class="p-3 border border-blue-200">blue, white, yellow, orange</td>
+                        <td class="p-3 border border-blue-200"><input type="text" class="w-full fill-blank"></td>
+                    </tr>
+                    <tr>
+                        <td class="p-3 border border-blue-200 font-bold text-purple-500">느낌 (Feeling)</td>
+                        <td class="p-3 border border-blue-200">fun, bright, friendly, cool</td>
+                        <td class="p-3 border border-blue-200"><input type="text" class="w-full fill-blank"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <!-- 갤러리 탭 콘텐츠 -->
-        <div id="gallery-content" class="hidden space-y-6">
-            <div class="text-center mb-6">
-                <button onclick="loadGallery()" class="bg-white border-2 border-blue-200 text-blue-600 hover:bg-blue-50 py-2 px-6 rounded-full text-sm font-bold flex items-center justify-center mx-auto transition-colors">
-                    🔄 최신 데이터 불러오기
-                </button>
+        <!-- Activity 2 -->
+        <div class="mb-10 bg-yellow-50 p-6 rounded-2xl border-2 border-yellow-200">
+            <h3 class="section-title text-yellow-700 bg-yellow-200">🎨 Activity 2. 마스코트 계획하기</h3>
+            <p class="mb-4 text-lg">내가 만들 마스코트의 특징을 상상하며 질문에 답해보세요.</p>
+            <div class="space-y-4 text-lg">
+                <p>1. What is your mascot’s name? <br><span class="pl-5 text-gray-500">➔ 이름은 <input type="text" class="fill-blank w-48"> 입니다.</span></p>
+                <p>2. What is it inspired by? (무엇에서 영감을 받았나요?)<br><span class="pl-5 text-gray-500">➔ <input type="text" class="fill-blank w-48"> 에서 영감을 받았습니다.</span></p>
+                <p>3. What color is it?<br><span class="pl-5 text-gray-500">➔ 색깔은 <input type="text" class="fill-blank w-48"> 입니다.</span></p>
+                <p>4. Is it cute, funny, or cool?<br><span class="pl-5 text-gray-500">➔ 느낌은 <input type="text" class="fill-blank w-48"> 합니다.</span></p>
+                <p>5. What does it show about Busan?<br><span class="pl-5 text-gray-500">➔ 부산의 <input type="text" class="fill-blank w-48"> 을(를) 보여줍니다.</span></p>
             </div>
+        </div>
+
+        <!-- Activity 3 -->
+        <div class="mb-10 bg-purple-50 p-6 rounded-2xl border-2 border-purple-200">
+            <h3 class="section-title text-purple-700 bg-purple-200">🤖 Activity 3. AI 프롬프트 (명령어) 작성</h3>
+            <p class="mb-4 text-lg">AI가 그림을 잘 그릴 수 있도록 영어로 명령어를 입력해 보세요. <strong>(그대로 써도 좋고, 단어를 바꿔도 좋아요!)</strong></p>
             
-            <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="col-span-full text-center py-12 text-gray-500 jua-font text-xl" id="gallery-loading">
-                    데이터를 불러오는 중입니다... ⏳
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="prompt-box">
+                    <p class="font-bold text-gray-700 mb-2">🌊 해운대/갈매기 버전</p>
+                    Make a cute mascot for Busan, Korea.<br>
+                    It is inspired by Haeundae Beach and a seagull.<br>
+                    Use blue and white colors.<br>
+                    Make it simple and cute.
+                </div>
+                <div class="prompt-box">
+                    <p class="font-bold text-gray-700 mb-2">🏘️ 감천문화마을 버전</p>
+                    Make a cute mascot inspired by Gamcheon Culture Village.<br>
+                    Use colorful houses.<br>
+                    Make it bright and friendly.<br>
+                    Make it simple and easy to draw.
                 </div>
             </div>
+            <div class="mt-4 p-3 bg-red-50 text-red-600 rounded-lg border border-red-200 font-bold">
+                💡 꿀팁: 키링으로 만들거니까 꼭 마지막에 <span class="bg-yellow-200 px-1">"Make it easy to draw (그리기 쉽게 만들어줘)"</span>를 넣어주세요!
+            </div>
+        </div>
+
+        <!-- Activity 4 & 6 -->
+        <div class="mb-10 bg-green-50 p-6 rounded-2xl border-2 border-green-200">
+            <h3 class="section-title text-green-700 bg-green-200">📝 Activity 4. My Busan Mascot 영어 소개서</h3>
+            <p class="mb-4 text-lg">빈칸을 채워 나만의 마스코트 소개 대본을 완성해 보세요! (이 대본으로 발표할 거예요 🎤)</p>
+            
+            <div class="bg-white p-6 rounded-xl border border-green-300 text-xl leading-loose shadow-sm">
+                Hello. <br>
+                My mascot’s name is <input type="text" class="fill-blank w-32" placeholder="이름">.<br>
+                It is inspired by <input type="text" class="fill-blank w-40" placeholder="장소/음식/상징">.<br>
+                It is <input type="text" class="fill-blank w-32" placeholder="느낌 (cute등)"> and <input type="text" class="fill-blank w-32" placeholder="느낌">.<br>
+                Its colors are <input type="text" class="fill-blank w-24" placeholder="색깔"> and <input type="text" class="fill-blank w-24" placeholder="색깔">.<br>
+                It shows <input type="text" class="fill-blank w-40" placeholder="보여주는 것">.<br>
+                I like my mascot because it is <input type="text" class="fill-blank w-32" placeholder="이유">. <br>
+                Thank you!
+            </div>
+            
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+                <span class="bg-gray-200 px-2 py-1 rounded-full">sea (바다)</span>
+                <span class="bg-gray-200 px-2 py-1 rounded-full">beach (해변)</span>
+                <span class="bg-gray-200 px-2 py-1 rounded-full">bridge (다리)</span>
+                <span class="bg-gray-200 px-2 py-1 rounded-full">seagull (갈매기)</span>
+                <span class="bg-gray-200 px-2 py-1 rounded-full">fish cake (어묵)</span>
+                <span class="bg-gray-200 px-2 py-1 rounded-full">colorful (알록달록한)</span>
+                <span class="bg-gray-200 px-2 py-1 rounded-full">cute (귀여운)</span>
+                <span class="bg-gray-200 px-2 py-1 rounded-full">funny (재미있는)</span>
+                <span class="bg-gray-200 px-2 py-1 rounded-full">friendly (친근한)</span>
+            </div>
+        </div>
+
+        <!-- Activity 5: Safety Rules -->
+        <div class="bg-red-50 p-6 rounded-2xl border-2 border-red-200">
+            <h3 class="section-title text-red-700 bg-red-200">🚨 Activity 5. 슈링클스 안전 수칙 (매우 중요!)</h3>
+            <p class="mb-4 text-lg">안전한 키링 제작을 위해 아래 수칙을 읽고 체크(✔️)해 주세요.</p>
+            <ul class="space-y-3 text-lg">
+                <li><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="w-5 h-5 text-red-600 rounded"> <span>1. 굽기 <strong>전</strong>에 펀치로 키링 구멍을 먼저 뚫을게요.</span></label></li>
+                <li><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="w-5 h-5 text-red-600 rounded"> <span>2. 오븐이나 히팅기는 매우 뜨거우니 <strong>절대</strong> 직접 만지지 않아요.</span></label></li>
+                <li><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="w-5 h-5 text-red-600 rounded"> <span>3. 구워진 슈링클스는 선생님이 꺼내주실 때까지 <strong>기다려요</strong>.</span></label></li>
+                <li><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="w-5 h-5 text-red-600 rounded"> <span>4. 작품이 충분히 식은 뒤에 키링 고리를 달게요.</span></label></li>
+                <li><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="w-5 h-5 text-red-600 rounded"> <span>5. 뜨거운 도구 근처에서 절대 장난치지 않겠습니다!</span></label></li>
+            </ul>
         </div>
 
     </div>
 
-    <script>
-        // 선생님께서 생성하신 구글 앱스 스크립트 웹 앱 URL이 적용되었습니다!
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGdwaGG8WOWTkS8VftrCm7E8hPK8LNt8eyc3tYutitiX8D2Cuj9KpcZfViU9ELy0RK/exec"; 
-        
-        function switchTab(tabName) {
-            const worksheetTab = document.getElementById('tab-worksheet');
-            const galleryTab = document.getElementById('tab-gallery');
-            const worksheetContent = document.getElementById('worksheet-content');
-            const galleryContent = document.getElementById('gallery-content');
-
-            if (tabName === 'worksheet') {
-                worksheetTab.classList.replace('inactive', 'active');
-                galleryTab.classList.replace('active', 'inactive');
-                worksheetContent.classList.remove('hidden');
-                galleryContent.classList.add('hidden');
-            } else {
-                galleryTab.classList.replace('inactive', 'active');
-                worksheetTab.classList.replace('active', 'inactive');
-                galleryContent.classList.remove('hidden');
-                worksheetContent.classList.add('hidden');
-                loadGallery();
-            }
-        }
-
-        function copyText(btnElement) {
-            const textToCopy = btnElement.parentElement.innerText.replace('복사', '').trim();
-            
-            const textArea = document.createElement("textarea");
-            textArea.value = textToCopy;
-            document.body.appendChild(textArea);
-            textArea.select();
-            
-            try {
-                document.execCommand('copy');
-                btnElement.innerText = "복사 완료!";
-                btnElement.style.backgroundColor = "#86efac";
-                setTimeout(() => {
-                    btnElement.innerText = "복사";
-                    btnElement.style.backgroundColor = "#e2e8f0";
-                }, 2000);
-            } catch (err) {
-                alert("복사에 실패했습니다. 직접 드래그해서 복사해주세요.");
-            }
-            document.body.removeChild(textArea);
-        }
-
-        async function submitWorksheet() {
-            if (SCRIPT_URL.includes("여기에_구글_앱스_스크립트")) {
-                alert("⚠️ 선생님 설정 필요: HTML 파일 내부의 SCRIPT_URL에 구글 앱스 스크립트 주소를 넣어주세요!");
-                return;
-            }
-
-            const studentName = document.getElementById('studentName').value.trim();
-            const mascotName = document.getElementById('mName').value.trim();
-            
-            if(!studentName) {
-                alert("학년 반 번호 & 이름을 입력해주세요!");
-                document.getElementById('studentName').focus();
-                return;
-            }
-            if(!mascotName) {
-                alert("마스코트 이름을 입력해주세요!");
-                document.getElementById('mName').focus();
-                return;
-            }
-
-            const data = {
-                studentName: studentName,
-                mascotName: mascotName,
-                inspiredBy: document.getElementById('mInspiration').value,
-                adj1: document.getElementById('mAdj1').value,
-                adj2: document.getElementById('mAdj2').value,
-                color1: document.getElementById('mColor1').value,
-                color2: document.getElementById('mColor2').value,
-                shows: document.getElementById('mShows').value,
-                reason: document.getElementById('mReason').value
-            };
-
-            const btn = document.getElementById('submitBtn');
-            const msg = document.getElementById('submitMsg');
-            
-            btn.innerHTML = '<div class="spinner"></div> 제출 중...';
-            btn.disabled = true;
-            btn.classList.add('opacity-75');
-
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8',
-                    }
-                });
-
-                btn.innerHTML = '🚀 제출 완료!';
-                btn.classList.replace('bg-blue-600', 'bg-green-500');
-                msg.classList.remove('hidden');
-
-                setTimeout(() => {
-                    switchTab('gallery');
-                    btn.innerHTML = '🚀 우리 반 갤러리에 제출하기';
-                    btn.classList.replace('bg-green-500', 'bg-blue-600');
-                    btn.disabled = false;
-                    btn.classList.remove('opacity-75');
-                    msg.classList.add('hidden');
-                }, 1500);
-
-            } catch (error) {
-                console.error('Error!', error);
-                alert("네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-                btn.innerHTML = '🚀 다시 제출하기';
-                btn.disabled = false;
-                btn.classList.remove('opacity-75');
-            }
-        }
-
-        async function loadGallery() {
-            const grid = document.getElementById('gallery-grid');
-            const loading = document.getElementById('gallery-loading');
-            
-            if (SCRIPT_URL.includes("여기에_구글_앱스_스크립트")) {
-                loading.innerHTML = "구글 시트 연동 설정이 필요합니다.<br>(HTML 소스코드 내 SCRIPT_URL을 변경해주세요)";
-                return;
-            }
-
-            loading.style.display = 'block';
-            grid.innerHTML = '';
-            grid.appendChild(loading);
-            loading.innerHTML = '<div class="spinner border-blue-500 border-top-transparent"></div> 데이터를 불러오는 중...';
-
-            try {
-                const response = await fetch(SCRIPT_URL);
-                const items = await response.json();
-
-                loading.style.display = 'none';
-                
-                if(items.length === 0) {
-                    grid.innerHTML = '<div class="col-span-full text-center py-12 text-gray-500 jua-font text-xl">아직 제출된 마스코트가 없어요. 첫 번째로 제출해 보세요! 🏃‍♂️💨</div>';
-                    return;
-                }
-
-                items.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = "bg-white p-6 rounded-2xl shadow-md border-t-4 border-blue-400 hover:shadow-lg transition-shadow relative overflow-hidden";
-                    
-                    const icon = document.createElement('div');
-                    icon.className = "absolute -bottom-4 -right-4 text-7xl opacity-5";
-                    icon.innerText = "🌊";
-                    
-                    card.innerHTML = `
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="jua-font text-2xl text-blue-800">${item.mascotName || '(이름 없음)'}</h3>
-                            <span class="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded-full">${item.studentName}</span>
-                        </div>
-                        <div class="text-gray-700 text-sm space-y-2 relative z-10">
-                            <p><strong>💡 Inspired by:</strong> ${item.inspiredBy}</p>
-                            <p><strong>✨ Features:</strong> ${item.adjectives}</p>
-                            <p><strong>🎨 Colors:</strong> ${item.colors}</p>
-                            <p><strong>🏙️ Shows:</strong> ${item.shows}</p>
-                            <p class="mt-3 text-blue-600 italic">"I like it because it is ${item.reason}."</p>
-                        </div>
-                    `;
-                    card.appendChild(icon);
-                    grid.appendChild(card);
-                });
-            } catch (error) {
-                console.error('Error loading gallery:', error);
-                loading.innerHTML = "데이터를 불러오는 데 실패했습니다.<br>잠시 후 다시 시도해주세요.";
-            }
-        }
-    </script>
 </body>
 </html>
