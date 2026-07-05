@@ -437,6 +437,73 @@
       </section>
 
       <section class="panel">
+        <div class="panel-head bg-pink">
+          <h2>🗣️ Activity 4. 발표 스크립트 만들기</h2>
+          <p>친구들에게 내 마스코트를 소개하는 글을 완성해봐요!</p>
+        </div>
+        <div class="panel-body">
+          <div class="sentence-builder">
+            <div class="sentence-line">
+              <span>Hello, everyone. This is my Busan mascot.</span>
+            </div>
+            
+            <div class="sentence-line">
+              <span>My mascot's name is</span>
+              <input type="text" id="ptName" class="blank-input live-field" placeholder="예: Bada">
+              <span>.</span>
+              <div class="kor-sub">내 마스코트의 이름은 [이름]이야.</div>
+            </div>
+            
+            <div class="sentence-line">
+              <span>I got the idea from</span>
+              <input type="text" id="ptIdea" class="blank-input live-field" placeholder="예: sea and seagull">
+              <span>.</span>
+              <div class="kor-sub">나는 [소재]에서 아이디어를 얻었어.</div>
+            </div>
+            
+            <div class="sentence-line">
+              <span>It looks like</span>
+              <input type="text" id="ptLook" class="blank-input live-field" placeholder="예: a small bird">
+              <span>.</span>
+              <div class="kor-sub">이것은 [겉모습]처럼 생겼어.</div>
+            </div>
+            
+            <div class="sentence-line">
+              <span>It is</span>
+              <input type="text" id="ptMood" class="blank-input live-field" placeholder="예: cute and friendly">
+              <span>.</span>
+              <div class="kor-sub">이것은 [성격/느낌]해.</div>
+            </div>
+            
+            <div class="sentence-line">
+              <span>The colors are</span>
+              <input type="text" id="ptColors" class="blank-input live-field" placeholder="예: blue and white">
+              <span>.</span>
+              <div class="kor-sub">색깔은 [색깔]이야.</div>
+            </div>
+            
+            <div class="sentence-line">
+              <span>It has</span>
+              <input type="text" id="ptFeature" class="blank-input live-field" placeholder="예: wave-shaped wings">
+              <span>.</span>
+              <div class="kor-sub">이것은 [특징]을/를 가지고 있어.</div>
+            </div>
+            
+            <div class="sentence-line">
+              <span>I like my mascot because</span>
+              <input type="text" id="ptReason" class="blank-input live-field" placeholder="예: it is cute">
+              <span>.</span>
+              <div class="kor-sub">나는 [이유] 때문에 내 마스코트가 좋아.</div>
+            </div>
+            
+            <div class="sentence-line">
+              <span>Thank you.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
         <div class="panel-head" style="background:#e2e8f0;">
           <h2>📸 Activity 5. 작품 사진 및 돌아보기</h2>
         </div>
@@ -546,10 +613,13 @@
     }
 
     function val(id) {
-      return document.getElementById(id).value.trim();
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : "";
     }
+    
     function txt(id, text) {
-      document.getElementById(id).textContent = text || "(미작성)";
+      const el = document.getElementById(id);
+      if(el) el.textContent = text || "(미작성)";
     }
     // 빈칸 처리 유틸 (빈칸이면 _ _ _ 출력)
     function blank(value) {
